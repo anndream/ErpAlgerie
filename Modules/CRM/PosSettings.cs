@@ -15,8 +15,18 @@ namespace ErpAlgerie.Modules.CRM
 {
     class PosSettings : ModelBase<PosSettings>
     {
-        [BsonIgnore]
+
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
         public override string ModuleName { get; set; } = "Configuration";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        public override string CollectionName { get; } = "Paramétres POS";
+        public override string IconName { get; set; } = "Settings";
+        public override bool ShowInDesktop { get; set; } = true;
+
+        #endregion
+         
         public override bool IsInstance { get; set; } = true;
 
         public PosSettings()
@@ -25,8 +35,7 @@ namespace ErpAlgerie.Modules.CRM
             {
                 Printers.Add(printer);
             }
-        }
-        public override string CollectionName { get; } = "Paramétres POS";
+        } 
         public override string Name
         {
             get
@@ -35,6 +44,7 @@ namespace ErpAlgerie.Modules.CRM
             }
             set => base.Name = value;
         }
+
         public static PosSettings getInstance()
         {
             var instance = DS.db.Count<PosSettings>(a => true);
