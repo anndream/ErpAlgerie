@@ -1,0 +1,20 @@
+﻿<Window x:Class="ErpAlgerie.Pages.PopupWait.PopupWaitView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ErpAlgerie.Pages.PopupWait"
+        mc:Ignorable="d"
+           xmlns:s="https://github.com/canton7/Stylet"
+        Title="Terminée" Height="134.333" Width="396" Icon="/ErpAlgerie;component/Images/Ok.png" Topmost="True" WindowStartupLocation="CenterScreen">
+    <Grid Height="auto" Width="auto">
+        <Label Content="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+               HorizontalContentAlignment="Center"
+               
+               VerticalContentAlignment="Center"
+               Width="auto"
+               FontSize="18" Foreground="#FF268D55" Height="auto" VerticalAlignment="Top"/>
+        <Button Command="{s:Action closePop}" Height="40" Content="Fermer" VerticalAlignment="Bottom" />
+
+    </Grid>
+</Window>

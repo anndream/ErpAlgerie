@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<app_menu>
+  <section header="Application" icon="Desktop">
+    <item header="Tableau de bord" icon="Desktop" description="" class=""/>
+    <item header="Ouvrir POS"  icon="Cartplus" description="" class=""/>
+    <item header="Ouvrir POS"  icon="Cartplus" description="" class=""/>
+  </section>
+
+  <section header="CRM" icon="Desktop">
+    <item header ="Clients" icon="Users" description="" class="ErpAlgerie.Modules.CRM.Client" />
+    <item header ="Contacts" icon="AddressCard" description="" class="ErpAlgerie.Modules.CRM.Contact" />
+    <item header ="Groupes clients" icon="Bookmark" description="" class="ErpAlgerie.Modules.CRM.GroupeClient" />
+    <item header ="Domaines d'activité" icon="Briefcase" description="" class="ErpAlgerie.Modules.CRM.DomaineActivite" />
+  </section>
+
+  <section header="Ventes">
+    <item header ="Commandes client" icon="Search" description="" class="ErpAlgerie.Modules.CRM.CommandeVente" />
+    <item header ="Factures" icon="Search" description="" class="ErpAlgerie.Modules.CRM.Facture" />
+
+    <item header ="Modéle entéte" icon="Search" description="" class="ErpAlgerie.Modules.CRM.ModeleEntete" />
+
+  </section>
+
+  <section header="Achats">
+  </section>
+
+  <section header="Stocks">
+    <item header ="Produits" icon="ShoppingCart" description="" class="ErpAlgerie.Modules.CRM.Article" />
+    <item header ="Stock" icon="Industry" description="" class="ErpAlgerie.Modules.CRM.Stock" />
+
+  </section>
+
+  <section header="Facturation">
+  </section>
+
+  <section header="Projets">
+  </section>
+
+  <section header="Ressources humaines">
+  </section>
+
+  <section header="Comptabilité">
+  </section>
+
+  <section header="Paramétrages">
+    <item header ="Options" icon="Gear" description="" instance="getInstance" class="ErpAlgerie.Modules.CRM.ElvaSettings" />
+    <item header ="Séries" icon="Clipboard" description=""   class="ErpAlgerie.Modules.CRM.SeriesName" />
+     <item header ="Taxes" icon="Clipboard" description=""   class="ErpAlgerie.Modules.CRM.Taxe" />
+    <item header ="Marques" icon="Certificate" description=""   class="ErpAlgerie.Modules.CRM.Marque" />
+    <item header ="Role" icon="Certificate" description=""   class="ErpAlgerie.Modules.CRM.Role" />
+    <item header ="Utilisateur" icon="Certificate" description=""   class="ErpAlgerie.Modules.CRM.User" />
+ <item header ="Modules" icon="Certificate" description=""   class="ErpAlgerie.Modules.CRM.ModuleErp" />
+
+  </section>
+
+
+
+
+
+</app_menu>

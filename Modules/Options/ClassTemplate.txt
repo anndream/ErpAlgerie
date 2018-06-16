@@ -1,0 +1,91 @@
+﻿class GroupeClient : ModelBase<GroupeClient>
+    {
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+
+        public override void Validate()
+        {
+            base.Validate();
+            base.ValidateUnique();
+
+            //   Nom
+            if (string.IsNullOrWhiteSpace(Designiation))
+                throw new Exception("Designiation est obligatoire");
+
+        }
+        public override string Name
+        {
+            get
+            {
+                return Designiation;
+            }set => base.Name = value;
+        }
+
+        public GroupeClient()
+        {
+
+        }
+        public override string CollectionName { get; } = "GroupeClient";
+
+        [ColumnAttribute(ModelFieldType.Text, "")]
+        [IsBoldAttribute(true)]
+        [ShowInTable(true)]
+        [DisplayName("Designiation")]
+        public string Designiation { get; set; }
+    }
+
+
+
+
+	// Link template
+
+	 [ShowInTableAttribute(false)]
+        [DisplayName("Groupe d'article")]
+        [ColumnAttribute(ModelFieldType.Lien, "GroupeArticle")]
+        public ObjectId? lGroupeArticle { get; set; } = ObjectId.Empty;
+
+
+		// separation template
+
+		 [ColumnAttribute(ModelFieldType.Separation, "")]
+        [BsonIgnore]
+        [DisplayName("Infos compte")]
+        public string sepcompte { get; set; }
+
+
+		// image
+
+		  [ColumnAttribute(ModelFieldType.Image, "PhotoIndice")]
+        [IsBoldAttribute(false)]
+        [ShowInTableAttribute(false)]
+        [DisplayName("Image")]
+        public string PhotoIndice { get; set; }
+          
+
+		  // devise
+
+		  
+        [ColumnAttribute(ModelFieldType.Devise, "")]
+        [IsBoldAttribute(false)]
+        [ShowInTable(true)]
+        [DisplayName("P.U.")]
+        public decimal PrixUnitaire { get; set; }
+
+
+		nLien
+		    [BsonIgnore]
+        [ShowInTableAttribute(true)]
+        [DontShowInDetailAttribute]
+        [DisplayName("Client")]
+        public string nClient
+        {
+            get
+            {
+                try
+                {
+                    return DataHelpers.GetMongoData("Client", "Id", lClient.ToString(), true).FirstOrDefault().Name;
+                }
+                catch
+                { }
+                return "";
+            }
+        }

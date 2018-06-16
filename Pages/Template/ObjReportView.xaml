@@ -1,0 +1,28 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ErpAlgerie.Pages.Template"
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ErpAlgerie.Pages.Template.ObjReportView"
+             mc:Ignorable="d" Height="1075.5" Width="1050.5"  >
+    <ScrollViewer HorizontalAlignment="Stretch" Background="#FF404040">
+        <StackPanel Orientation="Vertical"    >
+            <StackPanel Margin="10" Orientation="Horizontal">
+
+                <Button Content="Imprimer" Command="{s:Action print}"    />
+
+            </StackPanel>
+            <Grid VerticalAlignment="Center"   Width="22cm" MaxWidth="22cm" MinWidth="22cm"
+                        Height="22cm" MaxHeight="30.7cm" MinHeight="30.7cm"   Background="White" >
+
+                <ContentControl VerticalAlignment="Center"  VerticalContentAlignment="Center"  Width="21cm" MaxWidth="21cm" MinWidth="21cm"
+                        Height="21cm" MaxHeight="29.7cm" MinHeight="29.7cm" 
+                                Content="{Binding panel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                />
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

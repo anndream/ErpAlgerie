@@ -1,0 +1,61 @@
+﻿<Window x:Class="ErpAlgerie.Pages.LicenceManage.LicenceManagerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ErpAlgerie.Pages.LicenceManage"
+        mc:Ignorable="d"
+        Background="WhiteSmoke"
+        
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+          xmlns:s="https://github.com/canton7/Stylet"
+        Title="Activation de licence" Height="485" Width="416" VerticalAlignment="Top">
+    <StackPanel Margin="15,15,15,6">
+        <TextBlock Text="Enregistrement"/>
+        <Separator/>
+        <StackPanel Orientation="Horizontal">
+
+            <TextBlock Text="Type:  " Foreground="Gray"/>
+            <TextBlock Text="{Binding TypeLicence, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+
+            <TextBlock Text="Expiration:  " Foreground="Gray"/>
+            <TextBlock Text="{Binding DateExpiration, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        </StackPanel>
+        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBoxWhite}"
+                 Text="{Binding userName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:HintAssist.Hint="Nom et prénom"  />
+
+        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBoxWhite}"
+                 Text="{Binding email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:HintAssist.Hint="Votre E-Mail"  />
+
+
+        <TextBox TextWrapping="Wrap" Height="120" MaxHeight="120" Style="{StaticResource MaterialDesignFloatingHintTextBoxWhite}"
+                 Text="{Binding clePublic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:HintAssist.Hint="Votre clé public"  />
+
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+            <TextBox Style="{StaticResource
+                MaterialDesignFloatingHintTextBoxWhite}"
+                     
+                 Text="{Binding licenceFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:HintAssist.Hint="Charger votre licence..."  Width="340"/>
+            <Button Command="{s:Action LoadLicence}" Content="..." Padding="2" Height="29" Width="29" HorizontalAlignment="Right" Margin="5 0 0 0" VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 25" HorizontalAlignment="Right">
+
+            <Button Content="Lancer une période d'éssai (14 jours)" 
+                    Command="{s:Action  ActivateDemo}"
+                    FontSize="12" Background="Gray" 
+                    BorderBrush="DarkGray"/>
+            <Button Content="Valider" Command="{s:Action VlidateLicence}" Margin="10 0 0 0"/>
+        </StackPanel>
+
+
+    </StackPanel>
+</Window>

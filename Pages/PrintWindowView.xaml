@@ -1,0 +1,22 @@
+﻿<Window x:Class="ErpAlgerie.Pages.PrintWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ErpAlgerie.Pages"
+        mc:Ignorable="d"
+        Title="Exporter excel" Height="auto" Width="auto" VerticalAlignment="Stretch" Icon="/ErpAlgerie;component/Images/Ok.png">
+    <StackPanel Margin="10">
+
+        <ContentControl Content="{Binding props, Mode=OneWay,     UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        <Label Content="{Binding StatusText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" 
+                 Text="{Binding Titre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+            <Button Content="Ok" Command="{s:Action Ok}" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75" Background="#FF27A8F7" BorderBrush="#FF27A8F7" Foreground="White"/>
+            <Button Content="Annuler" Command="{s:Action Annuler}" HorizontalAlignment="Left" Margin="5 " VerticalAlignment="Top" Width="75"/>
+
+        </StackPanel>
+    </StackPanel>
+</Window>

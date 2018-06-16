@@ -1,0 +1,616 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{82335078-ADC6-457B-A864-B43FFC5B24AB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ErpAlgerie</RootNamespace>
+    <AssemblyName>ErpAlgerie</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <LangVersion>7</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>4C6813C14E2D0DFE07FCA183728FCD14A66E5395</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ErpAlgerie_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>bridge_1DY_icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BarcodeLib">
+      <HintPath>..\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Bogus, Version=22.0.2.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogus.22.0.2\lib\net40\Bogus.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.87.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
+    </Reference>
+    <Reference Include="CurrencyTextBoxControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CurrencyTextBox.1.4.3\lib\CurrencyTextBoxControl.dll</HintPath>
+    </Reference>
+    <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.0.7\lib\net45\DnsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DoddleReport, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DoddleReport.1.5.2.0\lib\net40\DoddleReport.dll</HintPath>
+    </Reference>
+    <Reference Include="DoddleReport.OpenXml, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DoddleReport.OpenXml.1.5.2.0\lib\net40\DoddleReport.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Dragablz, Version=0.0.3.197, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.197\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicExpresso.Core, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicExpresso.Core.1.3.4.7\lib\net40\DynamicExpresso.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="ExtendedGrid">
+      <HintPath>..\extended datagrid\ExtendedGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
+    </Reference>
+    <Reference Include="FastWpfGrid">
+      <HintPath>..\fastwpfgrid\FastWpfGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentScheduler, Version=5.3.0.0, Culture=neutral, PublicKeyToken=b76503528a14ebd1, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentScheduler.5.3.0\lib\net40\FluentScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="FontAwesome.WPF">
+      <HintPath>..\..\medicore\medicore\bin\Debug\FontAwesome.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\extended datagrid\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="ImagePackage">
+      <HintPath>..\extended datagrid\ImagePackage.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="L">
+      <HintPath>..\net-L-master\Library\bin\Debug\L.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.6.4\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.MahApps, Version=0.0.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.MahApps.0.0.11\lib\net45\MaterialDesignThemes.MahApps.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.0.1044, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.4.0.1044\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.5.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.5.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.5.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MultiEventCommandBinder">
+      <HintPath>..\extended datagrid\MultiEventCommandBinder.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\DATANEWS\Tresorier\Tresorier\bin\Debug\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp-WPF, Version=1.32.2608.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PdfSharp-WPF.SimpleWPFReporting.1.0.0\lib\net45\PdfSharp-WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Xps, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PdfSharp.Xps.SimpleWPFReporting.1.0.0\lib\net45\PdfSharp.Xps.dll</HintPath>
+    </Reference>
+    <Reference Include="Portable.Licensing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="SimpleWPFReporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleWPFReporting.1.1.0\lib\net45\SimpleWPFReporting.dll</HintPath>
+    </Reference>
+    <Reference Include="StringExtensionLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StringExtensionsLibrary.1.0.0\lib\StringExtensionLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="StringExtensions, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StringExtensions.1.1.1\lib\netstandard1.0\StringExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Stylet, Version=1.1.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stylet.1.1.21\lib\net45\Stylet.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.3.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="TemplateEngine.Docx, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TemplateEngine.Docx.1.1.3\lib\TemplateEngine.Docx.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WpfRichText, Version=1.0.16.0, Culture=neutral, PublicKeyToken=75ccead1e6af2af3, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfRichText2.1.0.17\lib\net45\WpfRichText.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapEx.Wpf">
+      <HintPath>..\fastwpfgrid\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="XMLViewer">
+      <HintPath>..\extended datagrid\XMLViewer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Framework\ModuleBuilderView.xaml.cs">
+      <DependentUpon>ModuleBuilderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\ModuleBuilderViewModel.cs" />
+    <Compile Include="Modules\Core\Data\GenericData.cs" />
+    <Compile Include="Modules\Core\FrameworkManager.cs" />
+    <Compile Include="Modules\Core\Data\DataHelpers.cs" />
+    <Compile Include="Modules\Core\Data\FilterEngine.cs" />
+    <Compile Include="Modules\Core\Helpers\Age.cs" />
+    <Compile Include="Modules\Core\Helpers\ModelExtentions.cs" />
+    <Compile Include="Modules\Core\Helpers\ModelTemplate.cs" />
+    <Compile Include="Modules\Core\Helpers\PrintHelper.cs" />
+    <Compile Include="Modules\Core\Helpers\RawPrinterHelper.cs" />
+    <Compile Include="Modules\Core\Helpers\SimpleReportTable.cs" />
+    <Compile Include="Modules\Core\Helpers\StringExtentions.cs" />
+    <Compile Include="Modules\Core\Hooks\Handler.cs" />
+    <Compile Include="Modules\Core\Module\ModelFieldType.cs" />
+    <Compile Include="Modules\Core\Module\NoModule.cs" />
+    <Compile Include="Modules\CRM\AccesRule.cs" />
+    <Compile Include="Modules\CRM\Adresse.cs" />
+    <Compile Include="Modules\CRM\Article.cs" />
+    <Compile Include="Modules\CRM\Client.cs" />
+    <Compile Include="Modules\CRM\CompteCompta.cs" />
+    <Compile Include="Modules\CRM\CompteSettings.cs" />
+    <Compile Include="Modules\CRM\Contact.cs" />
+    <Compile Include="Modules\CRM\DbSourceLink.cs" />
+    <Compile Include="Modules\CRM\EcritureJournal.cs" />
+    <Compile Include="Modules\CRM\EcriturePaiment.cs" />
+    <Compile Include="Modules\CRM\EcritureStock.cs" />
+    <Compile Include="Modules\CRM\ElvaSettings.cs" />
+    <Compile Include="Modules\CRM\Facture.cs" />
+    <Compile Include="Modules\CRM\GroupeArticle.cs" />
+    <Compile Include="Modules\CRM\GroupeClient.cs" />
+    <Compile Include="Modules\CRM\LigneEcritureStock.cs" />
+    <Compile Include="Modules\CRM\LigneFacture.cs" />
+    <Compile Include="Modules\CRM\ListePrix.cs" />
+    <Compile Include="Modules\CRM\MessageCommande.cs" />
+    <Compile Include="Modules\CRM\ModuleBuilder.cs" />
+    <Compile Include="Modules\CRM\ModuleErp.cs" />
+    <Compile Include="Modules\CRM\ModuleProperty.cs" />
+    <Compile Include="Modules\CRM\PosSettings.cs" />
+    <Compile Include="Modules\CRM\PrixArticle.cs" />
+    <Compile Include="Modules\CRM\Role.cs" />
+    <Compile Include="Modules\CRM\SeriesName.cs" />
+    <Compile Include="Modules\CRM\SessionPos.cs" />
+    <Compile Include="Modules\CRM\Stock.cs" />
+    <Compile Include="Modules\CRM\Taxe.cs" />
+    <Compile Include="Modules\CRM\TaxeLigne.cs" />
+    <Compile Include="Modules\CRM\TypeVariante.cs" />
+    <Compile Include="Modules\CRM\UniteMesure.cs" />
+    <Compile Include="Modules\CRM\User.cs" />
+    <Compile Include="Modules\CRM\Variante.cs" />
+    <Compile Include="Modules\POS\CartLine.cs" />
+    <Compile Include="Modules\POS\CartLineView.xaml.cs">
+      <DependentUpon>CartLineView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\POS\CartLineViewModel.cs" />
+    <Compile Include="Modules\POS\PayeTicketView.xaml.cs">
+      <DependentUpon>PayeTicketView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\POS\PayeTicketViewModel.cs" />
+    <Compile Include="Modules\POS\PointOfSaleView.xaml.cs">
+      <DependentUpon>PointOfSaleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\POS\PointOfSaleViewModel.cs" />
+    <Compile Include="Modules\POS\PosSelectView.xaml.cs">
+      <DependentUpon>PosSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\POS\PosSelectViewModel.cs" />
+    <Compile Include="Modules\CRM\PosTicket.cs" />
+    <Compile Include="Modules\POS\ProductBoxView.xaml.cs">
+      <DependentUpon>ProductBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\POS\ProductBoxViewModel.cs" />
+    <Compile Include="Modules\REPORTS\RapportSessionPosJournalier.cs" />
+    <Compile Include="Modules\REPORTS\SoldeStock.cs" />
+    <Compile Include="Pages\Events\ModelChangeEvent.cs" />
+    <Compile Include="Pages\Export\ExportManagerView.xaml.cs">
+      <DependentUpon>ExportManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Export\ExportManagerViewModel.cs" />
+    <Compile Include="Pages\Helpers\DocCard.cs" />
+    <Compile Include="Pages\Helpers\DocEngine.cs" />
+    <Compile Include="Pages\Helpers\PagingCollectionView.cs" />
+    <Compile Include="Pages\Home\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Home\HomeViewModel.cs" />
+    <Compile Include="Pages\LicenceManage\LicenceManagerView.xaml.cs">
+      <DependentUpon>LicenceManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LicenceManage\LicenceManagerViewModel.cs" />
+    <Compile Include="Pages\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginViewModel.cs" />
+    <Compile Include="Pages\PopupWait\PopupWaitView.xaml.cs">
+      <DependentUpon>PopupWaitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PopupWait\PopupWaitViewModel.cs" />
+    <Compile Include="Pages\PrintWindowView.xaml.cs">
+      <DependentUpon>PrintWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PrintWindowViewModel.cs" />
+    <Compile Include="Pages\Reports\ReportView.xaml.cs">
+      <DependentUpon>ReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportViewModel.cs" />
+    <Compile Include="Pages\Reports\TreeListView.cs" />
+    <Compile Include="Pages\Template\FiltreView.xaml.cs">
+      <DependentUpon>FiltreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\FiltreViewModel.cs" />
+    <Compile Include="Pages\Template\GenericWindowView.xaml.cs">
+      <DependentUpon>GenericWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\GenericWindowViewModel.cs" />
+    <Compile Include="Pages\Template\HomeMenuView.xaml.cs">
+      <DependentUpon>HomeMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\HomeMenuViewModel.cs" />
+    <Compile Include="Pages\Template\ObjReportView.xaml.cs">
+      <DependentUpon>ObjReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\ObjReportViewModel.cs" />
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ColumnHeaderBehavior.cs" />
+    <Compile Include="Modules\Core\Data\DataSource.cs" />
+    <Compile Include="Modules\Core\Data\IDataSource.cs" />
+    <Compile Include="Modules\Core\Helpers\Attribute Helpers.cs" />
+    <Compile Include="Modules\Core\Helpers\ColumnAttribute.cs" />
+    <Compile Include="Modules\Core\Helpers\IShell.cs" />
+    <Compile Include="Modules\Core\Module\IModel.cs" />
+    <Compile Include="Modules\Core\Module\ModelBase.cs" />
+    <Compile Include="Pages\ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ShellViewModel.cs" />
+    <Compile Include="Pages\Template\BaseView.xaml.cs">
+      <DependentUpon>BaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\BaseViewModel.cs" />
+    <Compile Include="Pages\Template\DetailView.xaml.cs">
+      <DependentUpon>DetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Template\DetailViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="ErpAlgerie_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\Core\Utilisateur\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Framework\ModuleBuilderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\POS\CartLineView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\POS\PayeTicketView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\POS\PointOfSaleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\POS\PosSelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\POS\ProductBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Export\ExportManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Home\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LicenceManage\LicenceManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PopupWait\PopupWaitView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PrintWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Reports\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Reports\ReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ShellView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Template\BaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Template\DetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Template\FiltreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Template\GenericWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Template\HomeMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Template\ObjReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\mongodb-generic-repository\mongodb-generic-repository\MongoDbGenericRepository\MongoDbGenericRepository.csproj">
+      <Project>{b02ea71c-3289-4371-8942-77afa27d260c}</Project>
+      <Name>MongoDbGenericRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OvExport\OvExport\OvExport.csproj">
+      <Project>{905ca83a-9170-4f6f-90b6-e85030a41c7a}</Project>
+      <Name>OvExport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OvImport\OvImport\OvImport.csproj">
+      <Project>{29ed1961-1a8e-4d57-8095-2be4b22d6ec9}</Project>
+      <Name>OvImport</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales\human-resources.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales\profile%281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\signs%281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sales\shapes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ovresko.ico" />
+    <Resource Include="Modules\Options\ClassTemplate.txt" />
+    <Resource Include="Images\logo-site.png" />
+    <Resource Include="Images\1000da.jpeg" />
+    <Resource Include="Images\100da.png" />
+    <Resource Include="Images\2000da.jpeg" />
+    <Resource Include="Images\200da.jpeg" />
+    <Resource Include="Images\500da.jpeg" />
+    <Resource Include="favicon.ico" />
+    <Resource Include="bridge_1DY_icon.ico" />
+    <Content Include="Modules\Models.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets'))" />
+  </Target>
+</Project>
