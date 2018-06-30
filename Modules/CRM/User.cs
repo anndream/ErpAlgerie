@@ -14,10 +14,20 @@ namespace ErpAlgerie.Modules.CRM
 {
     public class User : ModelBase<User>
     {
-        public override string ModuleName { get; set; } = "Configuration";
-        public override bool Submitable { get; set; } = false;
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        #region SETTINGS
 
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Utilisateurs";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        public override string IconName { get; set; } = "AccountKey";
+        public override bool ShowInDesktop { get; set; } = true;
+
+        public override string NameField { get; set; } = "Libelle";
+
+        #endregion
+
+         
         public override void Validate()
         {
             base.Validate();
@@ -26,9 +36,7 @@ namespace ErpAlgerie.Modules.CRM
         public User()
         {
         }
-        public override string CollectionName { get; } = "Utilisateurs";
-        public override string Name { get { return Libelle; } set => base.Name = value; }
-
+        
         [ColumnAttribute(ModelFieldType.Text, "")]
         [IsBoldAttribute(true)]
         [ShowInTable(true)]

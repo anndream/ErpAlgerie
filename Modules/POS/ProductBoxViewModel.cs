@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ErpAlgerie.Modules.POS
@@ -48,7 +49,7 @@ namespace ErpAlgerie.Modules.POS
         {
             _TypeBox = TypeBox.VARIANTE; 
             this.variante = item;
-        }
+         }
 
         public async void BoxClicked()
         {
@@ -58,8 +59,12 @@ namespace ErpAlgerie.Modules.POS
                  handler(this,EventArgs.Empty);
             }
         }
-         
 
+        public Visibility   HideImage { get {
+
+                return (DataHelpers.PosSettings.HideImageRepas ? Visibility.Collapsed : Visibility.Visible);
+
+            } }
         public Article product { get; set; }
         public Variante variante { get; set; }
 
@@ -80,31 +85,31 @@ namespace ErpAlgerie.Modules.POS
                 }
             }
         }
-
-        public string Name
+         public string Name
         {
             get
-            {
-                var propInSetting = PosSettings.getInstance().NameProperty;
+            { 
                 if (_TypeBox == TypeBox.ARTICLE)
                 {
-                    if (string.IsNullOrWhiteSpace(propInSetting))
-                    {
-                        return product.Name;
-                    }
-                    else
-                    {
-                        var nameProp = product.GetType().GetProperty(propInSetting);
-                        if (nameProp != null)
-                        {
-                            return product.GetType().GetProperty(propInSetting)?.GetValue(product)?.ToString();
-                        }
-                        else
-                        {
-                            return product.Name;
-                        }
-                    }
-                }else if(_TypeBox == TypeBox.VARIANTE)
+                    return product.Name;
+                    //if (string.IsNullOrWhiteSpace(propInSetting))
+                    //{
+                    //    return product.Name;
+                    //}
+                    //else
+                    //{
+                    //    var nameProp = product.GetType().GetProperty(propInSetting);
+                    //    if (nameProp != null)
+                    //    {
+                    //        return product.GetType().GetProperty(propInSetting)?.GetValue(product)?.ToString();
+                    //    }
+                    //    else
+                    //    {
+                    //        return product.Name;
+                    //    }
+                    //}
+                }
+                else if(_TypeBox == TypeBox.VARIANTE)
                 {
                     return variante.Name;
                 }

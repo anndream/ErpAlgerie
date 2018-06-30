@@ -4,10 +4,12 @@ using ErpAlgerie.Modules.Core.Helpers;
 using ErpAlgerie.Modules.CRM;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using MongoDB.Bson;
 using Stylet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -37,23 +39,26 @@ namespace ErpAlgerie.Modules.POS
                 return PosSettings.getInstance().PeutModifierPrix;
             }
         }
-        public ObservableCollection<UIElement> Products { get; set; }
-        public ObservableCollection<Button> Categories { get; set; }
-        public ObservableCollection<string> items { get; set; }
-        public ObservableCollection<UIElement> CartData { get; set; } = new ObservableCollection<UIElement>();
+        public BindableCollection<UIElement> Products { get; set; }
+        public BindableCollection<Button> Categories { get; set; }
+        public BindableCollection<string> items { get; set; }
+        public BindableCollection<UIElement> CartData { get; set; } = new BindableCollection<UIElement>();
         public SnackbarMessageQueue MessageQueue { get; set; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(1));
-        public ObservableCollection<CartLine> AllCartLines
-        {
-            get
-            {
-                return CurrentTicket?.CarteLines;
-            }
-        }
+        //public BindableCollection<CartLine> AllCartLines
+        //{
+        //    get
+        //    {
+        //        if(CurrentTicket != null)
+        //        return new BindableCollection<CartLine>(CurrentTicket?.CarteLines);
+        //        return new BindableCollection<CartLine>();
+        //    }
+        //}
         public string SearchMenuText { get; set; } = "";
         public int SesssionIndex { get; set; }
-        public ObservableCollection<PosTicket> Tickets { get; set; } = new ObservableCollection<PosTicket>();
+        public BindableCollection<PosTicket> Tickets { get; set; } = new BindableCollection<PosTicket>();
         public string Refresh { get; set; } = "Refresh";
         OK_ACTIONS OK_ACTION = OK_ACTIONS.SAVE;
+        public int Position { get; set; }
         public string OkStatus
         {
             get
@@ -94,18 +99,19 @@ namespace ErpAlgerie.Modules.POS
 
 
         private PosTicket _CurrentTicket;
+        private Timer timer;
+
         public PosTicket CurrentTicket
         {
             get { return _CurrentTicket; }
             set
             {
-                _CurrentTicket = value;
-                NotifyOfPropertyChange("CurrentTicket");
+                _CurrentTicket = value; 
             }
         }
 
         public bool _EstPrepayeOnly { get; set; }
-        public PosSettings settings { get; set; } = PosSettings.getInstance();
+        //public PosSettings settings { get; set; } = PosSettings.getInstance();
         public void AddTicket()
         {
 
@@ -116,10 +122,11 @@ namespace ErpAlgerie.Modules.POS
             }
 
 
-
             if (_EstPrepayeOnly)
             {
                 CurrentTicket = new PosTicket();
+                CurrentTicket.Position = this.Position;
+                this.Position++;
                 CurrentTicket.ticketType = TicketType.PREPAYE;
                 CurrentTicket.Numero = SesssionIndex++;
                 CurrentTicket.Date = DateTime.Now;
@@ -140,19 +147,30 @@ namespace ErpAlgerie.Modules.POS
 
             var view = DataHelpers.container.Get<ViewManager>().CreateAndBindViewForModelIfNecessary(ticketType);
             DataHelpers.windowManager.ShowDialog(ticketType);
-           
+            bool IsJumler = false;
             if (ticketType.ticketType == TicketType.TABLE)
             {
 
                 if(Tickets.Where(a => a.ticketType == TicketType.TABLE && a.Numero == ticketType.Numero).Count() > 0)
                 {
+                    MessageBox.Show($"Mode jumeler\nUne table avec le méme numéro <TABLE-{ticketType.Numero}> existe/ouverte! ");
 
-                    MessageBox.Show($"Une table avec le méme numéro <TABLE-{ticketType.Numero}> existe/ouverte!");
-                    return;
+
+                    var existedTicket = Tickets.First(a => a.ticketType == TicketType.TABLE && a.Numero == ticketType.Numero);
+                    CurrentTicket = existedTicket;
+                    //CurrentTicket?.Refresh();
+                    //Tickets?.Refresh();
+                    NotifyOfPropertyChange("CurrentTicket");
+                    NotifyOfPropertyChange("Tickets");
+
+                    IsJumler = true;
                 }
                 else
                 {
                     CurrentTicket = new PosTicket();
+                    CurrentTicket.Position = this.Position;
+                    this.Position++;
+
                     CurrentTicket.ticketType = ticketType.ticketType;                   
                     CurrentTicket.Numero = ticketType.Numero;
                     
@@ -162,20 +180,31 @@ namespace ErpAlgerie.Modules.POS
             else
             {
                 CurrentTicket = new PosTicket();
+                CurrentTicket.Position = this.Position;
+                this.Position++;
                 CurrentTicket.ticketType = ticketType.ticketType;
                 CurrentTicket.Numero = SesssionIndex++;
             
             }
             CartData.Add(view);
+            //CartData.Refresh();
+            NotifyOfPropertyChange("CartData");
 
+            if (settings.ListPrixParDefault != ObjectId.Empty && settings.ListPrixParDefault != null)
+            {
+                CurrentTicket.ListePrix = settings.ListPrixParDefault;
+            }
 
             CurrentTicket.Date = DateTime.Now;
-            Tickets.Add(CurrentTicket);
+            if(!IsJumler)
+                Tickets.Add(CurrentTicket);
+             
             CreateCartLines();
             NotifyOfPropertyChange("Tickets");
             NotifyOfPropertyChange("CurrentTicket");
             NotifyOfPropertyChange("Total");
-
+            if (ShowTicketsVisible)
+                ShowTickets();
 
         }
 
@@ -193,6 +222,7 @@ namespace ErpAlgerie.Modules.POS
 
                 if (doDelete == true)
                 {
+                    CurrentTicket.isHandled = 1;
                     CurrentTicket.Save();
                     var index = Tickets.IndexOf(CurrentTicket); // * * * *
                     Tickets.Remove(CurrentTicket); //  * * |*| *
@@ -229,6 +259,8 @@ namespace ErpAlgerie.Modules.POS
 
                     NotifyOfPropertyChange("Tickets");
                     NotifyOfPropertyChange("CurrentTicket");
+                    //CurrentTicket?.Refresh();
+                    //Tickets?.Refresh();
                     CreateCartLines();
                     MessageQueue.Enqueue("Vente terminé");
                 }
@@ -240,6 +272,8 @@ namespace ErpAlgerie.Modules.POS
                 //}
 
                 CreateCartLines();
+                if (ShowTicketsVisible)
+                    ShowTickets();
             }
             catch (Exception s)
             {
@@ -258,12 +292,81 @@ namespace ErpAlgerie.Modules.POS
         }
         public PointOfSaleViewModel()
         {
+            aViewManager = DataHelpers.container.Get<ViewManager>();
             // AddTicket();
-            CartData = new ObservableCollection<UIElement>();
-            Task.Run(() => Setup());
-            NotifyOfPropertyChange("Products");
+            CartData = new BindableCollection<UIElement>();
+
+            var notHnadled = DS.db.GetAll<PosTicket>(a => a.isHandled == 0) as IEnumerable<PosTicket>;
+            Tickets.AddRange(notHnadled);
+
+            BackgroundWorker worker = new BackgroundWorker();
+            timer = new Timer(new TimerCallback(SyncData),Tickets,0,5000);
+
+
 
         }
+
+        public void SyncData(object o)
+        {
+
+            var _tickets = o;
+            var notHnadled = DS.db.GetAll<PosTicket>(a => a.isHandled == 0 && a.FromTablet) as IEnumerable<PosTicket>;
+
+            if (notHnadled == null)
+                return;
+
+            foreach (var item in notHnadled)
+            {
+                item.FromTablet = false;
+                var here = Tickets.Where(a => a.NameTicket == item.NameTicket).FirstOrDefault();
+                if(here != null)
+                {
+                     here.CarteLines = item.CarteLines;
+                }
+                else
+                {
+                    Tickets.Add(item);
+                }
+
+                if (item.DoPrintFromTablet)
+                {
+                    item.Position = this.Position;
+                    this.Position++;
+                    item.EnvoyerCuisine();
+                    item.DoPrintFromTablet = false;
+                    item.isLocal = false;
+                    item.Save();
+                }
+            }
+            foreach (var item in Tickets.Reverse())
+            {                 
+                item.FromTablet = false;
+                try{
+                    var result = item.Save(); 
+                    if (!result)
+                    {
+                        var isThere = DS.db.GetOne<PosTicket>(a => a.Id == item.Id);
+                        if(isThere == null)
+                        {
+                            Tickets.Remove(item);
+                        }
+                    }
+                }
+                catch(Exception s) { Console.WriteLine("=======> "+s.Message ); continue; }
+            }
+
+
+            NotifyOfPropertyChange("CurrentTicket");
+            if(SelectedCartLine == null)
+                Execute.OnUIThread(CreateCartLines);
+            
+
+            if(ShowTicketsVisible)
+            {
+                Execute.OnUIThread(ShowTickets);
+            }
+        }
+
         public void Dispose()
         {
 
@@ -278,21 +381,23 @@ namespace ErpAlgerie.Modules.POS
             // Check Session
             var sessions = DataHelpers.GetMongoData("SessionPos", "DateSession", DateTime.Today, true) as IEnumerable<SessionPos>;
 
-            if (!sessions.Any())
-            {
+            if (!sessions.Any() || sessions.First(  ).CreatedBy != DataHelpers.ConnectedUser?.Id)
+            { 
                 var newSession = new SessionPos() { DateSession = DateTime.Now };
                 await DataHelpers.Shell.OpenScreenDetach(newSession, "Nouvelle session pos");
                 CurrentSession = newSession;
             }
-            else
+            else  
             {
                 CurrentSession = sessions.FirstOrDefault();
             }
+
+            RefreshAll();
         }
 
         public async void CloseSession()
         {
-            MessageBox.Show("Saisir le montant de cloture");
+            //MessageBox.Show("Saisir le montant de cloture");
             await DataHelpers.Shell.OpenScreenDetach(CurrentSession, "Cloturer la session pos");
             this.Close();
         }
@@ -458,50 +563,78 @@ namespace ErpAlgerie.Modules.POS
 
             NotifyOfPropertyChange("CmdStatus");
             NotifyOfPropertyChange("CmdColor");
+            ShowTicketsVisible = false; 
         }
+
+
+        public async void LoadCategorie(bool reload = false)
+        {
+            if (reload || Categories == null || Categories?.Any() == false)
+            {
+                Categories = new BindableCollection<Button>();
+                var cats = await DataHelpers.instanc().GetData<GroupeArticle>(a => true) as IEnumerable<GroupeArticle>;
+                foreach (var item in cats)
+                {
+                    var btnCat = new Button();
+
+                    btnCat.Content = item.Name;
+                    //btnCat.MinWidth = 200;
+                    btnCat.Height = 50;
+                    btnCat.Tag = item;
+                    btnCat.Click += BtnCat_Click1;
+                    btnCat.TouchDown += BtnCat_Click1;
+                    btnCat.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    btnCat.HorizontalContentAlignment = HorizontalAlignment.Center;
+                    btnCat.Margin = new Thickness(3);
+                    btnCat.Background = Brushes.Black;
+
+                    Categories.Add(btnCat);
+                }
+            }
+
+            NotifyOfPropertyChange("Categories");
+        }
+        public PosSettings settings { get; set; } = DataHelpers.PosSettings;
+
+
+        public IEnumerable<Article> AllArticles { get; set; } = new List<Article>();
 
         public async Task Setup(IEnumerable<Article> _items = null)
         {
             // AllCartLines = new HashSet<CartLine>();
-            var settings = PosSettings.getInstance();
+           
             _EstPrepayeOnly = settings.EstPrepayeOnly;
-            DispalyNameproperty = string.IsNullOrWhiteSpace(settings.NameProperty) ? "Name" : settings.NameProperty;
+           // DispalyNameproperty = string.IsNullOrWhiteSpace(settings.NameProperty) ? "Name" : settings.NameProperty;
 
-            Products = new ObservableCollection<UIElement>();
-            Categories = new ObservableCollection<Button>();
+            Products = new BindableCollection<UIElement>();
+            //Categories = new BindableCollection<Button>();
+            LoadCategorie();
             if (_items == null)
-                _items = await DataHelpers.instanc().GetMongoDataPaged<Article>(1,50) as IEnumerable<Article>;
-
-            var cats = await DataHelpers.instanc().GetData<GroupeArticle>(a => true) as IEnumerable<GroupeArticle>;
-            foreach (var item in cats)
             {
-                var btnCat = new Button();
-
-                btnCat.Content = item.Name;
-                btnCat.MinWidth = 100;
-                btnCat.Height = 50;
-                btnCat.Tag = item;
-                btnCat.Click += BtnCat_Click1;
-                btnCat.HorizontalAlignment = HorizontalAlignment.Left;
-                btnCat.HorizontalContentAlignment = HorizontalAlignment.Left;
-                btnCat.Margin = new Thickness(0, 5, 0, 0);
-                Categories.Add(btnCat);
+                //   _items = await DataHelpers.instanc().GetMongoDataPaged<Article>(1, 50) as IEnumerable<Article>;
+                AllArticles = await DataHelpers.instanc().GetData<Article>(a => true) as IEnumerable<Article>;
+                _items = AllArticles;
             }
+
             foreach (var item in _items)
             {
                 //Products = new ObservableCollection<UIElement>();
                 var productBox = new ProductBoxViewModel(item);
                 productBox.clickEvent += ProductBox_clickEvent;
-                var view = DataHelpers.container.Get<ViewManager>().CreateAndBindViewForModelIfNecessary(productBox);
+                var view = aViewManager.CreateAndBindViewForModelIfNecessary(productBox);
                 Products.Add(view);
+             //   
             }
-
-            NotifyOfPropertyChange("Categories");
+            //Categories.Refresh();
+            //Products.Refresh();
             NotifyOfPropertyChange("Products");
             NotifyOfPropertyChange("CartData");
             NotifyOfPropertyChange("Total");
+
+            ShowTicketsVisible = false;
         }
 
+        private ViewManager aViewManager;
         private async void BtnCat_Click1(object sender, RoutedEventArgs e)
         {
 
@@ -509,7 +642,8 @@ namespace ErpAlgerie.Modules.POS
 
             if (category != null)
             {
-                var items = DataHelpers.GetMongoData("Article", "lGroupeArticle", category.Id, false) as IEnumerable<Article>;
+                //var items = DataHelpers.GetMongoData("Article", "lGroupeArticle", category.Id, false) as IEnumerable<Article>;
+                var items = AllArticles.Where(a => a.lGroupeArticle == category.Id);
                 await Setup(items);
             }
         }
@@ -536,13 +670,13 @@ namespace ErpAlgerie.Modules.POS
                     Products.Add(view);
                 }
                 NotifyOfPropertyChange("Products");
-
                 NotifyOfPropertyChange("CmdStatus");
             }
             else
             {
-                var cartLine = new CartLine(article);
+                var cartLine = new CartLine(article,CurrentTicket?.ListePrix);
                 AddQteOrItem(1, cartLine);
+
             }
 
 
@@ -553,7 +687,7 @@ namespace ErpAlgerie.Modules.POS
         {
             var article = (sender as ProductBoxViewModel).product;
             var variante = (sender as ProductBoxViewModel).variante;
-            var cartLine = new CartLine(article,variante);
+            var cartLine = new CartLine(article,variante,CurrentTicket?.ListePrix);
             AddQteOrItem(1, cartLine);
            // MessageBox.Show("Variante");
             return;
@@ -564,16 +698,17 @@ namespace ErpAlgerie.Modules.POS
             try
             {
 
-                var exited = AllCartLines?.Where(a => a == cart).FirstOrDefault();
+                var exited = CurrentTicket?.CarteLines?.Where(a => a == cart).FirstOrDefault();
                 if (exited != null)
                 {// Just add qts
                     exited.Qts = qte;
                 }
                 else
                 {
-                    AllCartLines?.Add(cart);
+                    //AllCartLines?.Add(cart);
                 }
-
+                if (CurrentTicket != null)
+                    CurrentTicket.EstEnvoyerCuisine = false;
                 CreateCartLines();
             }
             catch (Exception s)
@@ -587,7 +722,7 @@ namespace ErpAlgerie.Modules.POS
             try
             {
 
-                var exited = AllCartLines?.Where(a => a == cart).FirstOrDefault();
+                var exited = CurrentTicket?.CarteLines?.Where(a => a == cart).FirstOrDefault();
                 if (exited != null)
                 {// Just add qts
                     exited.PricUnitaire = prix;
@@ -602,7 +737,7 @@ namespace ErpAlgerie.Modules.POS
 
         private void AddQteOrItem(decimal qte, CartLine cart)
         {
-            var exited = AllCartLines?.Where(a => a.article.Name == cart.article.Name 
+            var exited = CurrentTicket?.CarteLines?.Where(a => a.article.Name == cart.article.Name 
             && (a.variante == cart.variante || a.variante?.Name == cart.variante.Name)
              ).FirstOrDefault();
             if (exited != null)
@@ -611,11 +746,11 @@ namespace ErpAlgerie.Modules.POS
             }
             else
             {
-                AllCartLines?.Add(cart);
+                CurrentTicket?.CarteLines?.Add(cart);
             }
 
-
-            CurrentTicket.EstEnvoyerCuisine = false;
+            if(CurrentTicket!=null)
+                CurrentTicket.EstEnvoyerCuisine = false;
             
             NotifyOfPropertyChange("CmdStatus");
             NotifyOfPropertyChange("CmdColor");
@@ -626,7 +761,7 @@ namespace ErpAlgerie.Modules.POS
         public void CreateCartLines()
         {
             CartData.Clear();
-            if (AllCartLines == null)
+            if (CurrentTicket?.CarteLines == null)
             {
                 NotifyOfPropertyChange("CartData");
                 NotifyOfPropertyChange("Total");
@@ -635,15 +770,17 @@ namespace ErpAlgerie.Modules.POS
                 NotifyOfPropertyChange("CmdColor");
                 return;
             }
-
-            foreach (var cartLine in AllCartLines)
+           
+            foreach (var cartLine in CurrentTicket?.CarteLines)
             {
+                cartLine.ListePrix = CurrentTicket.ListePrix;
                 var cartLineView = new CartLineViewModel(cartLine);
                 cartLineView.clickEvent += CartLineView_clickEvent;
                 cartLineView.DoubleClick += CartLineView_DoubleClick;
                 var view = DataHelpers.container.Get<ViewManager>().CreateAndBindViewForModelIfNecessary(cartLineView);
                 CartData.Add(view);
             }
+             
 
             NotifyOfPropertyChange("CartData");
             NotifyOfPropertyChange("Tickets");
@@ -659,13 +796,25 @@ namespace ErpAlgerie.Modules.POS
             try
             {
                 var line = (sender as CartLine);
+                if(line == null)
+                {
+                    MessageBox.Show("Selectionner un repas!");
+                    return;
+                }
 
                 var host = new Window();
-                host.Width = 500;
-                host.Height = 450;
+                host.Width = 750;
+                host.Height = 650;
                 host.Background = Brushes.LightGray;
 
+
+
+                //var scroll = new ScrollViewer();
+                //scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                //scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+
                 var sp = new StackPanel();
+                sp.CanVerticallyScroll = true;
                 sp.Orientation = Orientation.Vertical;
                 sp.VerticalAlignment = VerticalAlignment.Stretch;
                 sp.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -678,34 +827,57 @@ namespace ErpAlgerie.Modules.POS
                 text.FontSize = 35;
                 text.Margin = new Thickness(10);
                 var btn = new Button();
+                btn.Margin = new Thickness(10, 20, 10, 10);
                 btn.Content = "OK";
                 btn.VerticalAlignment = VerticalAlignment.Bottom;
-
+                
                 var msgs = DS.db.GetAll<MessageCommande>(a => true) as IEnumerable<MessageCommande>;
-                var list = new ListView();
-                list.ItemsSource = msgs.Select(z => z.Message);
-                list.MaxHeight = 200;
-                list.Margin = new Thickness(10);
-                list.Background = Brushes.White;
-                list.SelectionChanged += delegate
+                var list = new WrapPanel();
+                 
+                foreach (var item in msgs)
                 {
-                    text.Text += list.SelectedItem?.ToString()+" / ";
-                };
+                    var btnMsg = new Button();
+                    btnMsg.Content = item.Message;
+                    btnMsg.Tag = item;
+                    btnMsg.Background = Brushes.Black;
+                    btnMsg.Margin = new Thickness(5);
+                    btnMsg.Click += delegate
+                    {
+                        text.Text += btnMsg.Content?.ToString() + " / ";
+                    };
+
+                    list.Children.Add(btnMsg);
+
+                }
+
+               // list.ItemsSource = msgs.Select(z => z.Message);
+                //list.FontWeight = FontWeights.Bold;
+              
+                //list.MaxHeight = 200;
+               // list.Margin = new Thickness(10);
+               // list.Background = Brushes.White;
+                //list.SelectionChanged += delegate
+                //{
+                //    text.Text += list.SelectedItem?.ToString()+" / ";
+                //};
                 btn.Click += delegate
                 {
                     var msg = text.Text; 
                      host.Tag = msg; 
-                    
-                   
+                    host.Hide();
+                };
+                btn.TouchDown += delegate
+                {
+                    var msg = text.Text;
+                    host.Tag = msg;
                     host.Hide();
                 };
 
+                 
 
-                
-
+                sp.Children.Add(btn);
                 sp.Children.Add(text);
                 sp.Children.Add(list);
-                sp.Children.Add(btn);
 
                 host.Content = sp;
                 host.ShowDialog();
@@ -728,7 +900,9 @@ namespace ErpAlgerie.Modules.POS
             var cartline = sender as CartLine;
             if (cartline != null)
             {
-                AllCartLines?.Remove(cartline);
+                CurrentTicket?.CarteLines?.Remove(cartline);
+                if (CurrentTicket != null)
+                    CurrentTicket.EstEnvoyerCuisine = false;
                 CreateCartLines();
             }
         }
@@ -742,24 +916,29 @@ namespace ErpAlgerie.Modules.POS
         {
             if (CurrentTicket == null)
                 return;
-            var ticketType = new PosSelectViewModel(CurrentTicket);
+            var ticketType = new PosSelectViewModel(CurrentTicket,Tickets);
 
             var view = DataHelpers.container.Get<ViewManager>().CreateAndBindViewForModelIfNecessary(ticketType);
             DataHelpers.windowManager.ShowDialog(ticketType);
-            CurrentTicket = ticketType.currentTicket;
 
+            CurrentTicket = ticketType.currentTicket;
+            //CurrentTicket?.Refresh();
+            //Tickets?.Refresh();
             NotifyOfPropertyChange("CurrentTicket");
             NotifyOfPropertyChange("Tickets");
             NotifyOfPropertyChange("CurrentTicket");
 
             NotifyOfPropertyChange("CmdStatus");
             NotifyOfPropertyChange("CmdColor");
+            if (ShowTicketsVisible)
+                ShowTickets();
         }
 
         public void Close()
         {
             try
             {
+                timer.Dispose();
                 this.RequestClose(true);
 
             }
@@ -785,6 +964,9 @@ namespace ErpAlgerie.Modules.POS
             NotifyOfPropertyChange("Tickets");
             NotifyOfPropertyChange("CmdColor");
             NotifyOfPropertyChange("CmdStatus");
+
+            //CurrentTicket?.Refresh();
+            //Tickets?.Refresh();
         }
 
         public void NextTicket()
@@ -798,9 +980,10 @@ namespace ErpAlgerie.Modules.POS
             {
                 index--;
             }
+            //CurrentTicket?.Refresh();
+            //Tickets?.Refresh();
             NotifyOfPropertyChange("CurrentTicket");
             NotifyOfPropertyChange("Tickets");
-
             NotifyOfPropertyChange("CmdStatus");
             NotifyOfPropertyChange("CmdColor");
         }
@@ -809,6 +992,7 @@ namespace ErpAlgerie.Modules.POS
         {
             if (CurrentTicket != null)
             {
+                CurrentTicket.Delete(false);
                 Tickets.Remove(CurrentTicket);
                 NotifyOfPropertyChange("Tickets");
 
@@ -818,6 +1002,11 @@ namespace ErpAlgerie.Modules.POS
 
                 MessageQueue.Enqueue("Ticket supprimer");
                 NextTicket();
+
+                if (ShowTicketsVisible)
+                    ShowTickets();
+
+               
             }
         }
 
@@ -854,6 +1043,15 @@ namespace ErpAlgerie.Modules.POS
                 CurrentTicket.EnvoyerCuisine();
                 NotifyOfPropertyChange("CmdStatus");
                 NotifyOfPropertyChange("CmdColor");
+
+                //CurrentTicket?.Refresh();
+                //Tickets?.Refresh();
+
+                NotifyOfPropertyChange("CurrentTicket");
+                NotifyOfPropertyChange("Tickets");
+
+                if (ShowTicketsVisible)
+                    ShowTickets();
             }
         }
 
@@ -871,20 +1069,23 @@ namespace ErpAlgerie.Modules.POS
 
                 if (!CurrentTicket.EstDeLivrer)
                     MessageQueue.Enqueue($"TICKET NON LIVRÉ");
+
+                if (ShowTicketsVisible)
+                    ShowTickets();
             }
         }
-
+        public bool ShowTicketsVisible { get; set; } = false;
         public void ShowTickets()
         {
             var tickets = this.Tickets;
-            if(tickets == null || !tickets.Any())
-            {
-                MessageBox.Show("Aucun ticket!");
-                return;
-            }
+            //if(tickets == null || !tickets.Any())
+            //{
+            //    MessageBox.Show("Aucun ticket!");
+            //    return;
+            //}
 
-
-            Products = new ObservableCollection<UIElement>();
+            ShowTicketsVisible = true;
+            Products = new BindableCollection<UIElement>();
 
             foreach (var item in tickets)
             {
@@ -916,7 +1117,7 @@ namespace ErpAlgerie.Modules.POS
                 icon.VerticalAlignment = VerticalAlignment.Center;
                 icon.VerticalContentAlignment = VerticalAlignment.Center;
                 TextBlock text = new TextBlock();
-                text.Text = item.Name;
+                text.Text = item.NameTicket;
                 text.Margin = new Thickness(0, 10, 0, 0);
                 text.HorizontalAlignment = HorizontalAlignment.Center;
                 sp.Children.Add(icon);
@@ -924,7 +1125,8 @@ namespace ErpAlgerie.Modules.POS
                 ticket.Content = sp;
 
                 ticket.Click += Ticket_Click;
-                
+                ticket.TouchDown += Ticket_Click;
+
                 Products.Add(ticket);
             }
 
@@ -942,7 +1144,8 @@ namespace ErpAlgerie.Modules.POS
             NotifyOfPropertyChange("Tickets");
             NotifyOfPropertyChange("CurrentTicket");
 
-            RefreshAll();
+            //ShowTickets();
+           // RefreshAll();
         }
 
         public void OpenDrawer()
@@ -958,6 +1161,39 @@ namespace ErpAlgerie.Modules.POS
             
         }
 
-      
+      public void OuvrirMsg()
+        {
+            CartLineView_DoubleClick(SelectedCart, EventArgs.Empty);
+        }
+
+
+        public void ShowTicktsOld()
+        {
+            this.ExpandView();
+            DataHelpers.Shell.OpenScreenFindAttach(typeof(PosTicket), "Historique Tickets");
+       
+        }
+
+        public int CatScroll { get; set; }
+
+        public void CatUp()
+        {
+
+        }
+
+        protected override void OnInitialActivate()
+        {
+            base.OnInitialActivate();
+
+            try
+            {
+                var ticketOld = DS.db.GetAll<PosTicket>(a => a.isHandled == 0 && a.Date < DateTime.Today.AddDays(-1));
+                DS.db.DeleteMany(ticketOld);
+            }
+            catch (Exception s)
+            {
+                MessageBox.Show(s.Message);
+            }
+        }
     }
 }

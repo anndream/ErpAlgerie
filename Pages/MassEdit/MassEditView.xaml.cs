@@ -12,18 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ErpAlgerie.Pages
+namespace ErpAlgerie.Pages.MassEdit
 {
     /// <summary>
-    /// Logique d'interaction pour LoginView.xaml
+    /// Logique d'interaction pour MassEditView.xaml
     /// </summary>
-    public partial class LoginView : Window
+    public partial class MassEditView : Window
     {
-        public LoginView()
+        public MassEditView()
         {
             InitializeComponent();
         }
-
-      
     }
 }

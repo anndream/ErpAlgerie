@@ -17,11 +17,11 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = true;
-        public override string ModuleName { get; set; } = "COMPTE";
+        public override string ModuleName { get; set; } = "COMPTES";
         public override string CollectionName { get; } = "Écriture de journal";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
         public override string IconName { get; set; } = "TableEdit";
-        public override bool ShowInDesktop { get; set; } = true;
+        public override bool ShowInDesktop { get; set; } = false;
 
         #endregion
 

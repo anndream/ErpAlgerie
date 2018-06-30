@@ -121,8 +121,7 @@ namespace AttributtedDataColumn
             //style1.Setters.Add(new Setter(property: DataGridCell.FontSizeProperty, value: 20));
             //e.Column.CellStyle = style1;
            // if (e.Column.DisplayIndex == 0)
-             
-
+              
             string displayName = GetPropertyDisplayName(e.PropertyDescriptor);
             bool isShow = GetPropertyIsShowTable(e.PropertyDescriptor);
             var columnAttr = (e.PropertyDescriptor as PropertyDescriptor)?.Attributes[typeof(ColumnAttribute)] as ColumnAttribute;
@@ -130,7 +129,7 @@ namespace AttributtedDataColumn
             if (columnAttr != null) {
 
                 if (columnAttr?.FieldType == ModelFieldType.Devise
-                || (columnAttr.FieldType == ModelFieldType.ReadOnly && columnAttr.Options == "{0:C}"))
+                || (columnAttr.FieldType == ModelFieldType.ReadOnly && columnAttr.Options == "{0} DA"))
                 estDevise = true;
 
                 
@@ -185,8 +184,8 @@ namespace AttributtedDataColumn
                 {
                     DataGridTextColumn dataGridTextColumn = e.Column as DataGridTextColumn;
                     if (dataGridTextColumn != null)
-                    {
-                        dataGridTextColumn.Binding.StringFormat = "{0:C}";
+                    { 
+                        dataGridTextColumn.Binding.StringFormat = "{0} DA";
                     }
                 }
                 if (e.PropertyType == typeof(DateTime))
@@ -194,7 +193,7 @@ namespace AttributtedDataColumn
                     DataGridTextColumn dataGridTextColumn = e.Column as DataGridTextColumn;
                     if (dataGridTextColumn != null)
                     {
-                        dataGridTextColumn.Binding.StringFormat = "{0:d}";
+                        dataGridTextColumn.Binding.StringFormat = "d";
                     }
                 }
                 e.Column.Header = displayName;

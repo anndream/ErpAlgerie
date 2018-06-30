@@ -15,7 +15,7 @@ namespace ErpAlgerie.Modules.CRM
     class CompteSettings : ModelBase<CompteSettings>
     {
         [BsonIgnore]
-        public override string ModuleName { get; set; } = "Configuration";
+        public override string ModuleName { get; set; } = "COMPTES";
         public override bool IsInstance { get; set; } = true;
 
         public CompteSettings()

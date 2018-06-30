@@ -25,7 +25,7 @@ namespace ErpAlgerie.Modules.CRM
     {
 
         public override bool Submitable { get; set; } = false;
-        public override string ModuleName { get; set; } = "Paramétres";
+        public override string ModuleName { get; set; } = "PDV";
         public override string CollectionName { get; } = "Session POS";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
         public override string IconName { get; set; } = "CalendarToday";
@@ -79,13 +79,14 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Rapport du jour")]
         public string GenererRapportBtn { get; set; }
 
-        public void GenererRapport()
+        public async void GenererRapport()
         {
 
             var repor = new ReportViewModel(new RapportSessionPosJournalier(this));
             repor.DisplayName = $"Rapport {this.DateSession.ToShortDateString()}";
-            DataHelpers.Shell.Items.Add(repor);
-            DataHelpers.Shell.ActivateItem(repor);
+            //DataHelpers.Shell.Items.Add(repor);
+            //DataHelpers.Shell.ActivateItem(repor);
+           await DataHelpers.Shell.OpenScreenDetach(repor, repor.DisplayName);
             this.CloseParent();
         }
 

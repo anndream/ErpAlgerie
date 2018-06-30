@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
      xmlns:s="https://github.com/canton7/Stylet" 
-    Language="fr-DZ"
+    Language="ar-DZ"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ErpAlgerie.Modules.POS"
      KeyDown="{s:Action UserControl_KeyDown}" 
              xmlns:Custom="https://github.com/canton7/Stylet" xmlns:materialDesignMahApps="http://materialdesigninxaml.net/winfx/xaml/themes"
     x:Class="ErpAlgerie.Modules.POS.PayeTicketView"
-             mc:Ignorable="d" Width="900" Height="502">
+    Title="Paiement"
+             mc:Ignorable="d" Width="900" Height="532">
     <Grid Background="#303030">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -57,15 +58,17 @@
                 <CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
                           IsChecked="{Binding CreateFacture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Content="Facturer?" Foreground="White" FontWeight="SemiBold" FontSize="16"/>
-                <CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                          IsChecked="{Binding OpenPdf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          Content="Ouvrir facture" Foreground="White" FontWeight="SemiBold" FontSize="16"/>
+               
                 <CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
                            IsChecked="{Binding DeleteTicket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Content="Effacer ticket (F2)" Foreground="White" FontWeight="SemiBold" FontSize="16"/>
                 <CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
                            IsChecked="{Binding PrintPdf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Content="Imprimer (F3)" Foreground="White" FontWeight="SemiBold" FontSize="16"/>
+
+                <CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                          IsChecked="{Binding OpenPdf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Content="Ouvrir facture" Foreground="White" FontWeight="SemiBold" FontSize="16"/>
                 <!--<CheckBox Margin="0 10" VerticalAlignment="Center" VerticalContentAlignment="Center"
                            IsChecked="{Binding PrintKitchen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           Content="Imprimer cuisine" Foreground="White" FontWeight="SemiBold" FontSize="16"/>-->
@@ -80,10 +83,10 @@
                        Foreground="LightGray" Padding="10 0"
                        FontSize="14"/>
                     <Border BorderThickness="0 0 0 0" HorizontalAlignment="Stretch" BorderBrush="Red" Padding="10 0">
-                        <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding ticket.Total,StringFormat=C, 
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 Text="{Binding ticket.TotalNet,StringFormat='C', 
                             Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 IsEditable="True"
+                                IsReadOnly="True"
                                   GotFocus="{s:Action SelectAll}"
                             Foreground="White"
                             Padding="0"
@@ -98,11 +101,11 @@
                     <TextBlock Text="REMISE" VerticalAlignment="Center"
                        Foreground="LightGray" Padding="10 0"
                        FontSize="14"/>
-                    <Border BorderThickness="0 0 0 0" BorderBrush="Red" Padding="10 0">
-                        <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding ticket.Remise,StringFormat=C, 
+                    <Border BorderThickness="{Binding REMISE_BORDER, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Red" Padding="10 0">
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 Text="{Binding ticket.Remise,StringFormat='C', 
                             Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 IsEditable="True"
+                                 
                                   GotFocus="{s:Action SelectAllMontantRemise}"
                                  
                             Foreground="White"
@@ -118,12 +121,12 @@
                     <TextBlock Text="REÇU" VerticalAlignment="Center"
                        Foreground="LightGray" Padding="10 0"
                        FontSize="14"/>
-                    <Border BorderThickness="0 0 0 0" BorderBrush="Red" Padding="10 0">
-                        <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding MontantRecu,StringFormat=C, 
+                    <Border BorderThickness="{Binding RECU_BORDER, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Red" Padding="10 0">
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 Text="{Binding MontantRecu,StringFormat='C', 
                             Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 IsEditable="True"
-                                  
+                                
+                                 
                                   GotFocus="{s:Action SelectAllMontantRecu}"
                             Foreground="White"
                             Padding="0"
@@ -140,11 +143,10 @@
                        Foreground="LightGray" Padding="10 0"
                        FontSize="14"/>
                     <Border BorderThickness="0 0 0 0" BorderBrush="Red" Padding="10 0">
-                        <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding ticket.MontantPaye,StringFormat=C, 
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 Text="{Binding ticket.MontantPaye,StringFormat='C', 
                             Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 IsEditable="True"
-                                   
+                               IsReadOnly="True"
                             Foreground="White"
                             Padding="0"
                             Margin="0"  
@@ -160,7 +162,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Border BorderThickness="0 0 0 0" BorderBrush="Red" Padding="10 0">
                             <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding ticket.Reste,StringFormat=C, 
+                                 Text="{Binding ticket.Reste,StringFormat='{0:C}', 
                             Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEditable="True"
                                   
@@ -185,8 +187,8 @@
                     <StackPanel  Margin="0 15">
                         <TextBlock Padding="10 0" Text="à payé" FontSize="25" Foreground="White"/>
                         <TextBlock Padding="10 0" Text="{Binding ticket.Reste, 
-                        Mode=OneWay,StringFormat=C, UpdateSourceTrigger=PropertyChanged}"
-                               FontSize="40" FontWeight="SemiBold" Foreground="#AEEA00"
+                        Mode=OneWay,StringFormat='C', UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="40" FontWeight="Bold" Foreground="#AEEA00"
                                />
                         <StackPanel VerticalAlignment="Center" Margin="0 10" Orientation="Vertical">
                             <TextBlock Text="Montant retour " VerticalAlignment="Center"
@@ -194,7 +196,7 @@
                        FontSize="14"/>
                             <Border BorderThickness="0 0 0 0" BorderBrush="Red" Padding="10 0">
                                 <ComboBox HorizontalAlignment="Stretch" 
-                                 Text="{Binding MontantRetour,StringFormat=C, 
+                                 Text="{Binding MontantRetour,StringFormat='C', 
                             Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEditable="True" 
                                  
@@ -215,7 +217,8 @@
 
             <ScrollViewer>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" CanVerticallyScroll="True">
-                    <Image Source="/ErpAlgerie;component/Images/100da.png" MaxWidth="100" Margin="2" MouseLeftButtonUp="{s:Action da100}"/>
+                    <Image Source="/ErpAlgerie;component/Images/100da.png" MaxWidth="100" Margin="2" 
+                           MouseLeftButtonUp="{s:Action da100}"/>
                     <Image Source="/ErpAlgerie;component/Images/200da.jpeg" MaxWidth="200"  Margin="2"  MouseLeftButtonUp="{s:Action da200}" />
                     <Image Source="/ErpAlgerie;component/Images/500da.jpeg" MaxWidth="200" Margin="2"  MouseLeftButtonUp="{s:Action da500}" />
                     <Image Source="/ErpAlgerie;component/Images/1000da.jpeg" MaxWidth="200" Margin="2"  MouseLeftButtonUp="{s:Action da1000}" />
@@ -303,6 +306,13 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <materialDesign:PackIcon Kind="CheckCircleOutline" VerticalAlignment="Center" Width="30" Height="30"/>
                     <TextBlock Margin="15 0" FontSize="22" Text="PAYE (F1)"/>
+                </StackPanel>
+            </Button>
+
+            <Button Background="WhiteSmoke" Foreground="Black" Command="{s:Action CloseTicket}" Height="60" Padding="5" Margin="0 10">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" Width="30" Height="30"/>
+                    <TextBlock Margin="15 0" FontSize="22" Text="FERMER"/>
                 </StackPanel>
             </Button>
         </StackPanel>

@@ -57,6 +57,11 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Designiation")]
         public string Designiation { get; set; }
 
+        [ShowInTableAttribute(false)]
+        [DisplayName("Position cuisine")]
+        [ColumnAttribute(ModelFieldType.Lien, "CuisinePosition")]
+        public ObjectId? aCuisinePosition { get; set; } = ObjectId.Empty;
+
         [ColumnAttribute(ModelFieldType.Text, "")]
         [DisplayName("Code  identifiant")]
         public string Code { get; set; }
@@ -185,7 +190,15 @@ namespace ErpAlgerie.Modules.CRM
         }
 
 
-
+        public decimal GetPrixFromList(ObjectId? liste)
+        {
+            var lp = DS.db.GetOne<PrixArticle>(a => a.lArticle == this.Id && a.ListePrix_ == liste);
+            if(lp != null)
+            {
+                return lp.Taux;
+            }
+            return this.PrixVente;
+        }
 
 
         #region LINKS

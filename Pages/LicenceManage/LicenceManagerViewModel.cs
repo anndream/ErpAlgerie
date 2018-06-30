@@ -115,6 +115,10 @@ namespace ErpAlgerie.Pages.LicenceManage
                 if (FrameworkManager.ValidateLicence(clePublic,userName,email))
                 {
                     MessageBox.Show("Licence validée");
+                    var settings = new ElvaSettings().getInstance();
+                    settings.UserName = userName;
+                    settings.Email = email;
+                    settings.Save();
                     IsValide = true;
                     this.RequestClose();
                 }

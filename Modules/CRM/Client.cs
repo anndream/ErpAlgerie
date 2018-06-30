@@ -25,7 +25,7 @@ namespace ErpAlgerie.Modules.CRM
         public override string ModuleName { get; set; } = "CRM";
         public override string CollectionName { get; } = "Clients";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
-        public override string IconName { get; set; } = "AccountMultiple";
+        public override string IconName { get; set; } = "AccountMultiple";  
         public override bool ShowInDesktop { get; set; } = true;
 
         #endregion

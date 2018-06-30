@@ -7,43 +7,31 @@
              xmlns:s="https://github.com/canton7/Stylet" 
              mc:Ignorable="d" Padding="0" Margin="0" HorizontalAlignment="Stretch"
               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-         Language="fr-DZ"
+         Language="ar-DZ"
              KeyDown="{s:Action UserControl_KeyDown}" 
              d:DesignHeight="497.682" d:DesignWidth="1139.735" Background="White">
-    
-        <Grid Background="#FAFAFA">
+
+    <Grid Background="#FAFAFA">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="460" MinWidth="460"/>
+            <ColumnDefinition Width="380" MinWidth="380"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        
+
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                
-                <ItemsControl ItemsSource="{Binding Categories, IsAsync=True, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"   ScrollViewer.CanContentScroll="True">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-                   
-                 
-            </ScrollViewer>
-           
-           
+
+
+
         </Grid>
         <GridSplitter Grid.Row="1"   HorizontalAlignment="Stretch" Width="5" Grid.Column="1"/>
         <Grid Grid.Column="2" Grid.Row="1"  >
@@ -52,16 +40,59 @@
                                     HorizontalAlignment="Left"
                                     Width="auto"        
                                     />-->
-            <ScrollViewer VerticalScrollBarVisibility="Auto">          
-                <ItemsControl  VirtualizingStackPanel.IsVirtualizing="True" ItemsSource="{Binding Products, Mode=OneWay , UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
+
+            <Grid   Grid.Row="0" VerticalAlignment="Top" MaxHeight="165"  Margin="0,0,00,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer x:Name="CatScroller" Grid.Column="0" VerticalAlignment="Top" MaxHeight="150" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
+                    <ItemsControl ItemsSource="{Binding Categories, IsAsync=True, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  
+                              ScrollViewer.CanContentScroll="True" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Margin="0,0,0,0"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <StackPanel Grid.Column="1" >
+                    <Button Height="60" Background="Gray" Margin="0 5"   BorderThickness="0" Padding="0" Click="Button_Click">
+                        <materialDesign:PackIcon Kind="ArrowUpBold" Height="25" Width="25" Margin="0" Padding="0"/>
+                    </Button>
+                    <Button Height="60" Background="Gray" Margin="0 5" Padding="0" BorderThickness="0" Click="Button_Click_1">
+                        <materialDesign:PackIcon Kind="ArrowDownBold" Height="25" Width="25" Margin="0" Padding="0"/>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <Grid Margin="0 170 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer x:Name="ProductScroller" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
+                    <ItemsControl  VirtualizingStackPanel.IsVirtualizing="True" ItemsSource="{Binding Products, Mode=OneWay , UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
                               ScrollViewer.CanContentScroll="True">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel VirtualizingPanel.IsVirtualizing="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            </ScrollViewer>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel VirtualizingPanel.IsVirtualizing="True"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <StackPanel Grid.Column="1" >
+                    <Button Height="60" Background="Gray" Margin="0 5" BorderThickness="0" Padding="0" Click="Button_Click_2">
+                        <materialDesign:PackIcon Kind="ArrowUpBold" Height="25" Width="25" Margin="0" Padding="0"/>
+                    </Button>
+                    <Button Height="60" Background="Gray" Margin="0 5" Padding="0" BorderThickness="0" Click="Button_Click_3">
+                        <materialDesign:PackIcon Kind="ArrowDownBold" Height="25" Width="25" Margin="0" Padding="0"/>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+
             <materialDesign:Snackbar SnapsToDevicePixels="True" MessageQueue="{Binding MessageQueue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
@@ -70,44 +101,50 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="70" MinHeight="70"/>
+                <RowDefinition Height="100" MinHeight="100"/>
                 <RowDefinition MinHeight="280" Height="280"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                
+
                 <!--Cart data-->
                 <ScrollViewer VerticalScrollBarVisibility="Auto" >
                     <StackPanel>
 
                         <StackPanel Background="#303030" Orientation="Horizontal"  Height="60" 
                                     VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                            <ComboBox Margin="8 0" Height="42" MinWidth="180" ItemsSource="{Binding Tickets,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                      DisplayMemberPath="NameTicket"      FontWeight="Bold" SelectionChanged="{s:Action CreateCartLines}"
+                            <ComboBox Margin="5,9" Height="42" MinWidth="100" 
+                                      ItemsSource="{Binding Tickets,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                      DisplayMemberPath="NameTicket"      FontWeight="Bold" 
+                                      SelectionChanged="{s:Action CreateCartLines}"
                                       materialDesign:HintAssist.Hint="TICKETS"
                                       Style="{StaticResource MaterialDesignFloatingHintComboBoxWhite}"
-                                       VirtualizingPanel.IsVirtualizing="True"
-                    VirtualizingPanel.VirtualizationMode="Recycling"
-                    ItemsPanel="{StaticResource VSP}"
+                                       
                                       FontSize="25"
-                                      DropDownClosed="{s:Action CreateCartLines}"
-                                      SelectedItem="{Binding CurrentTicket, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                            
+                                      
+                                      SelectedItem="{Binding CurrentTicket, Mode=TwoWay, IsAsync=False,
+                                UpdateSourceTrigger=PropertyChanged}" Width="130">
+                                <!---->
                             </ComboBox>
-                            <Button Command="{s:Action BackTicket}" ToolTip="Ticket précédent" Padding="2" Height="45" Width="45"  Margin=" 0">
+                            <Button Command="{s:Action BackTicket}" ToolTip="Ticket précédent" 
+                                    Padding="2" Height="45" Width="45"  Margin="1 0">
                                 <materialDesign:PackIcon Kind="ArrowLeftBold" Width="27" Height="27"/>
                             </Button>
-                            <Button Command="{s:Action NextTicket}" ToolTip="Ticket suivant" Padding="2" Height="45" Width="45"  Margin=" 0">
+                            <Button Command="{s:Action NextTicket}" ToolTip="Ticket suivant" Padding="2" 
+                                    Height="45" Width="45"  Margin="1 0">
                                 <materialDesign:PackIcon Kind="ArrowRightBold" Width="27" Height="27"/>
                             </Button>
 
-                            <Button Command="{s:Action OpenDrawer}" ToolTip="Ouvrir tiroir caisse" Padding="2" Height="45" Width="45"  Margin="10 0 5 0">
+                            <Button Command="{s:Action OpenDrawer}" ToolTip="Ouvrir tiroir caisse" Padding="2" 
+                                    Height="45" Width="45"  Margin="1 0">
                                 <materialDesign:PackIcon Kind="CurrencyUsd"  Width="29" Height="29"/>
                             </Button>
 
-                            <Button Command="{s:Action TransfertTicket}" ToolTip="Transférer ticket" Padding="2" Height="45" Width="45"  Margin="5 0">
+                            <Button Command="{s:Action TransfertTicket}" ToolTip="Transférer ticket" Padding="2" 
+                                    Height="45" Width="45"  Margin="1 0">
                                 <materialDesign:PackIcon Kind="AccountConvert" Width="27" Height="27"/>
                             </Button>
-                            <Button Command="{s:Action DeleteTicket}" ToolTip="Effacer Ticket" Padding="2" Height="45" Width="45"  Margin="5 0">
+                            <Button Command="{s:Action DeleteTicket}" ToolTip="Effacer Ticket" Padding="2" Height="45"
+                                    Width="45"  Margin="1 0">
                                 <materialDesign:PackIcon Kind="CloseCircle" Width="27" Height="27"/>
                             </Button>
                         </StackPanel>
@@ -134,7 +171,7 @@
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>
-                      
+
                     </StackPanel>
                 </ScrollViewer>
 
@@ -142,67 +179,98 @@
             <GridSplitter  Grid.Row="1" Height="5"  HorizontalAlignment="Stretch"></GridSplitter>
             <Grid Grid.Row="2">
                 <Border Background="#303030"    BorderBrush="Firebrick">
-                  
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                        <StackPanel VerticalAlignment="Center" Margin="5" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Button Height="39" Margin="0 0 10 0" Background="{Binding CmdColor, Mode=OneWay,   UpdateSourceTrigger=PropertyChanged}" ToolTip="Envoyer commande cuisine" Padding="5" MaxHeight="39" Command="{s:Action EnvoyerCuisine}" >
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <WrapPanel  Grid.Column="0" Grid.Row="0" Margin="5">
+                            <Button Height="39" Margin="0 0 10 0" Width="80" Background="{Binding CmdColor, Mode=OneWay,   UpdateSourceTrigger=PropertyChanged}" ToolTip="Envoyer commande cuisine" Padding="5" MaxHeight="39" Command="{s:Action EnvoyerCuisine}" >
                                 <StackPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <materialDesign:PackIcon Kind="Printer" Height="29" Width="29"/>
+                                    <materialDesign:PackIcon Kind="FoodForkDrink" Height="29" Width="29"/>
                                     <TextBlock VerticalAlignment="Center" Margin="5 0" Height="auto" Text="{Binding CmdStatus, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Height="39" Background="{Binding CmdColor, Mode=OneWay, 
+                            <Button  Margin="0 5 0 0" Height="39" Background="{Binding CmdColor, Mode=OneWay, 
                                 UpdateSourceTrigger=PropertyChanged}" 
                                     ToolTip="Livrer ticket" Padding="5" MaxHeight="39" Command="{s:Action LivrerTicket}" >
-                                <StackPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel   Orientation="Horizontal" VerticalAlignment="Center">
                                     <materialDesign:PackIcon Kind="Cart" Height="29" Width="29"/>
-                                             </StackPanel>
+                                </StackPanel>
                             </Button>
-                            
-                        </StackPanel>
-                        <StackPanel VerticalAlignment="Center" Width="140">
 
-                            <TextBlock Foreground="White"    HorizontalAlignment="Left" 
-                                           VerticalAlignment="Center" Margin="5 0" 
+                            <Button  Margin="5 5 0 0" Height="39" 
+                                     Background="{Binding CmdColor, Mode=OneWay, 
+                                UpdateSourceTrigger=PropertyChanged}" 
+                                    ToolTip="Messages" Padding="5" MaxHeight="39"
+                                     Command="{s:Action OuvrirMsg}" >
+                                <StackPanel   Orientation="Horizontal" VerticalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="MessageReplyText" Height="29" Width="29"/>
+                                </StackPanel>
+                            </Button>
+
+                        </WrapPanel>
+
+
+                        <StackPanel VerticalAlignment="Top" Grid.Column="1" Grid.Row="0"  >
+                           <StackPanel Orientation="Horizontal" Margin="0 -5">
+                                <TextBlock   Foreground="White" MaxWidth="160"   HorizontalAlignment="Left" 
+                                           VerticalAlignment="Center"  
                                            Text="{Binding SelectedCart.article.Name,
                                 Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Foreground="#AEEA00"   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0"
-                                   Text="{Binding OkStatus, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                        
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 0 10 0" >
-
-                            <TextBlock Foreground="White" FontSize="20" HorizontalAlignment="Left" MaxWidth="130"  VerticalAlignment="Center" Margin="0 0"
+                                 <TextBlock   Foreground="White"  Margin="5 0 0 0"  HorizontalAlignment="Left" 
+                                           VerticalAlignment="Center"  
+                                           Text="{Binding SelectedCart.Qts,StringFormat= ............. {0},
+                                Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                               <Label Content="x" Foreground="White"    />
+                                <TextBlock   Foreground="Lime"    HorizontalAlignment="Left" 
+                                           VerticalAlignment="Center"  
+                                           Text="{Binding SelectedCart.PricUnitaire,
+                                Mode=OneWay, StringFormat='N', UpdateSourceTrigger=PropertyChanged}"/>
+                           </StackPanel>
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                
+                                <TextBlock  Foreground="Lime" Padding="0" FontSize="18"  Margin="0 0 10 0"  HorizontalAlignment="Left" VerticalAlignment="Center"  
+                                   Text="{Binding CurrentTicket.Position,StringFormat=#{0}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                               
+                                <TextBlock Foreground="White" FontSize="18"     Background="Green" Padding="0 0"
                                    Text="{Binding PAD_TEXT, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                        <StackPanel Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <TextBlock Margin="0 -3" Padding="0" Foreground="#E9E9E9"  HorizontalAlignment="Left" Text="Total à payé"/>
-                            <TextBlock Margin="0 -3" Padding="0" HorizontalAlignment="Right"
-                                       Foreground="#AEEA00"
-                                       FontWeight="SemiBold"
-                                       FontSize="36"                                       
+                                <TextBlock Foreground="White" FontSize="18"    Padding="0 0"
+                                   Text="{Binding CurrentTicket.MontantPaye, StringFormat=PAYÉ {0} DA, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <!--<TextBlock  Foreground="Lime" Padding="0" FontSize="18"  Margin="5 0 0 0"  HorizontalAlignment="Left" VerticalAlignment="Center"  
+                                   Text="{Binding OkStatus, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+                            </StackPanel>
+                            <TextBlock   HorizontalAlignment="Right"
+                                       Foreground="Lime"
+                                       FontWeight="Bold" Margin="0 -5 5 5"
+                                       FontSize="50"                                        
                                        Text="{Binding Total, IsAsync=True,
-                                Mode=OneWay,StringFormat=C,
+                                Mode=OneWay,StringFormat='N',
                                 UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
-                     
-                    </StackPanel>
+
+
+                    </Grid>
                 </Border>
             </Grid>
             <Grid Grid.Row="3" Background="White" >
 
                 <StackPanel Orientation="Vertical">
-                    
+
                     <StackPanel Margin="5" >
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/> 
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="90"/>
@@ -239,91 +307,96 @@
                             </Button>
 
                             <!--DELETE-->
-                            <Button Command="{s:Action PAD_DELETE}" Grid.Column="4" Grid.Row="2" FontSize="28" Foreground="Black"
+                                <Button Command="{s:Action PAD_DELETE}" Grid.Column="4" Grid.Row="2" FontSize="28" Foreground="Black"
                                     Background="WhiteSmoke" BorderThickness="0" Margin="3" Height="84">
-                                <materialDesign:PackIcon Kind="Backspace" Height="30" Width="30" />
-                            </Button>
+                                    <materialDesign:PackIcon Kind="Backspace" Height="30" Width="30" />
+                                </Button>
 
                                 <Button Command="{s:Action AddTicket}" Grid.Column="4"   Grid.Row="1" FontSize="28" 
                                     Foreground="White" Background="#009688"
                                     BorderThickness="0" Margin="3" Height="84">
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
-                                    <materialDesign:PackIcon Kind="Plus" Height="40" Width="40" />
-                                    <TextBlock HorizontalAlignment="Center" FontSize="14" Text=" F2  "/>
-                                </StackPanel>
-                            </Button>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+                                        <materialDesign:PackIcon Kind="Plus" Height="40" Width="40" />
+                                        <TextBlock HorizontalAlignment="Center" FontSize="14" Text=" F2  "/>
+                                    </StackPanel>
+                                </Button>
 
 
-                            <!--PAYE-->
-                            <Button Command="{s:Action BTN_SAVE}" Grid.Column="4"   Grid.Row="0" FontSize="28" 
+                                <!--PAYE-->
+                                <Button Command="{s:Action BTN_SAVE}" Grid.Column="4"   Grid.Row="0" FontSize="28" 
                                     Foreground="White"  
                                     BorderThickness="0" Margin="3" Height="84">
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
-                                    <materialDesign:PackIcon Kind="CheckCircle" Height="40" Width="40" />
-                                    <TextBlock HorizontalAlignment="Center" FontSize="14" Text=" F1 "/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </StackPanel>
-                </StackPanel>
-                
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+                                        <materialDesign:PackIcon Kind="CheckCircle" Height="40" Width="40" />
+                                        <TextBlock HorizontalAlignment="Center" FontSize="14" Text=" F1 "/>
+                                    </StackPanel>
+                                </Button>
             </Grid>
-        </Grid>
-
-        <!--TOOL BAR-->
-        <Grid Background="#E9E9E9" Grid.ColumnSpan="3" Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="110"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <Button Command="{s:Action CloseSession}" HorizontalAlignment="Left"
-                        Background="#303030" BorderThickness="0"
-                        Padding="2" Height="45" Width="45"  Margin="5 0">
-                    <materialDesign:PackIcon Kind="Close" Width="27" Height="27"/>
-                </Button>
-
-                <Button Command="{s:Action ExpandView}" HorizontalAlignment="Left"
-                        Background="#303030" BorderThickness="0"
-                        Padding="2" Height="45" Width="45"  Margin="5 0">
-                    <materialDesign:PackIcon Kind="ArrowExpandAll" Width="27" Height="27"/>
-                </Button>
-                
-                    
+            </StackPanel>
             </StackPanel>
 
+        </Grid>
+    </Grid>
+
+    <!--TOOL BAR-->
+    <Grid Background="#E9E9E9" Grid.ColumnSpan="3" Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="110"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Column="0">
+            <Button Command="{s:Action CloseSession}" HorizontalAlignment="Left"
+                        Background="#303030" BorderThickness="0"
+                        Padding="2" Height="45" Width="45"  Margin="5 0">
+                <materialDesign:PackIcon Kind="Close" Width="27" Height="27"/>
+            </Button>
+
+            <Button Command="{s:Action ExpandView}" HorizontalAlignment="Left"
+                        Background="#303030" BorderThickness="0"
+                        Padding="2" Height="45" Width="45"  Margin="5 0">
+                <materialDesign:PackIcon Kind="ArrowExpandAll" Width="27" Height="27"/>
+            </Button>
 
 
-            <TextBox Focusable="True"  
+        </StackPanel>
+
+
+
+        <TextBox Focusable="True"  
             Grid.Column="1" TextChanged="{s:Action FiltreProduit}"
                                     Text="{Binding SearchMenuText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Margin="8 0 0 0" Padding="0" FontSize="20" 
+            Margin="8,12,62,12" Padding="0" FontSize="20" 
             materialDesign:HintAssist.Hint="Chercher..."
             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
             BorderThickness="0"
-            MinWidth="500" HorizontalAlignment="Stretch"
+            MinWidth="350" HorizontalAlignment="Stretch"
             VerticalAlignment="Center" />
 
-            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" >
+        <StackPanel Orientation="Horizontal" Grid.Column="1" 
+                        HorizontalAlignment="Right" Grid.ColumnSpan="2" Width="167" >
 
-             
-                <Button Command="{s:Action RefreshAll}" Padding="2" Height="45" Width="45"  Margin="5 0">
-                    <materialDesign:PackIcon Kind="{Binding Refresh, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="27" Height="27"/>
-                </Button>
-                 
+            <Button Command="{s:Action ShowTicktsOld}" 
+                        Padding="2" Height="45" Width="45"  Margin="5 0">
+                <materialDesign:PackIcon Kind="FormatListBulleted" Width="27" Height="27"/>
+            </Button>
+
+            <Button Command="{s:Action RefreshAll}" Padding="2" Height="45" Width="45"  Margin="5 0">
+                <materialDesign:PackIcon Kind="{Binding Refresh, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="27" Height="27"/>
+            </Button>
 
 
-                <Button Command="{s:Action ShowTickets}" Padding="2" Height="45" Width="45"  Margin="5 0">
-                    <materialDesign:PackIcon Kind="TagMultiple" Width="27" Height="27"/>
-                </Button>
+
+            <Button Command="{s:Action ShowTickets}" Padding="2" Height="45" Width="45"  Margin="5 0">
+                <materialDesign:PackIcon Kind="TagMultiple" Width="27" Height="27"/>
+            </Button>
 
 
-              
 
-             
-            </StackPanel>
-        </Grid>
-      
-    </Grid> 
+
+
+        </StackPanel>
+    </Grid>
+
+    </Grid>
 </UserControl>

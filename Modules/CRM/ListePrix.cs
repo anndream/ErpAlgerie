@@ -19,7 +19,7 @@ namespace ErpAlgerie.Modules.CRM
         public override string CollectionName { get; } = "Liste des prix";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string IconName { get; set; } = "CurrencyUsd";
-        public override bool ShowInDesktop { get; set; } = true;
+        public override bool ShowInDesktop { get; set; } = false;
 
         public override void Validate()
         {

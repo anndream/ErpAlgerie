@@ -12,12 +12,20 @@ namespace ErpAlgerie.Modules.CRM
 {
     class GroupeArticle : ModelBase<GroupeArticle>
     {
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Stock";
-        [BsonIgnore]
-        public override string SubModule { get; set; } = "Articles et prix";
-        [BsonIgnore]
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "STOCK";
+        public override string CollectionName { get; } = "Groupe d'article";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string IconName { get; set; } = "Gears";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Designiation";
+
+        #endregion
+
+         
 
         public override void Validate()
         {
@@ -25,13 +33,12 @@ namespace ErpAlgerie.Modules.CRM
             base.ValidateUnique();
 
         }
-
-        public override string Name { get => Designiation; set => base.Name = value; }
+         
         public GroupeArticle()
         {
 
-        }
-        public override string CollectionName { get; } = "Groupe d'article";
+        } 
+        
 
         [ColumnAttribute(ModelFieldType.Text, "")]
         [IsBoldAttribute(true)]

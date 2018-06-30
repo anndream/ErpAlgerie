@@ -21,65 +21,58 @@ namespace ErpAlgerie.Modules.CRM
 {
     class UniteMesure : ModelBase<UniteMesure>
     {
-
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
-
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Stock";
-        [BsonIgnore]
-        public override string SubModule { get; set; } = "Références";
-        [BsonIgnore]
-        public override string IconName { get; set; } = "Gears";
-
-
-
+        #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "STOCK";
+        public override string CollectionName { get; } = "Unités de Mesure";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "Gears";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Libelle";
+
+
+        #endregion
+
+
+
+
         public override void Validate()
         {
             base.Validate();
-              base.ValidateUnique();
+            base.ValidateUnique();
 
         }
 
-          public override string Name
-        {
-            get
-           {
-                return Libelle;
-            }
-            set => base.Name = value;
-        }
 
-       
 
         public UniteMesure()
         {
 
         }
-        public override string CollectionName { get; } = "UniteMesure";
-
-
-        
-
-
-[IsBoldAttribute(true)]
-[ShowInTable(true)]
-[ColumnAttribute(ModelFieldType.Text, "")]
-[DisplayName("Libellé")]
-public string Libelle{ get; set; } 
 
 
 
 
-[IsBoldAttribute(false)]
-[ShowInTable(true)]
-[ColumnAttribute(ModelFieldType.Text, "")]
-[DisplayName("Symbole")]
-public string Symbole{ get; set; } 
+
+        [IsBoldAttribute(true)]
+        [ShowInTable(true)]
+        [ColumnAttribute(ModelFieldType.Text, "")]
+        [DisplayName("Libellé")]
+        public string Libelle { get; set; }
+
+
+
+
+        [IsBoldAttribute(false)]
+        [ShowInTable(true)]
+        [ColumnAttribute(ModelFieldType.Text, "")]
+        [DisplayName("Symbole")]
+        public string Symbole { get; set; }
 
 
     }
 
-        
-    }
+
+}

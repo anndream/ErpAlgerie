@@ -12,6 +12,8 @@ namespace ErpAlgerie.Modules.POS
     class PosSelectViewModel : Screen,IDisposable
     {
         public PosTicket currentTicket;
+        private BindableCollection<PosTicket> tickets;
+
         public bool Edit { get; set; } = false;
         public PosSelectViewModel(PosTicket currentTicket)
         {
@@ -24,6 +26,11 @@ namespace ErpAlgerie.Modules.POS
         public PosSelectViewModel()
         {
 
+        }
+
+        public PosSelectViewModel(PosTicket currentTicket, BindableCollection<PosTicket> tickets) : this(currentTicket)
+        {
+            this.tickets = tickets;
         }
 
         public TicketType ticketType { get; set; }
@@ -65,8 +72,32 @@ namespace ErpAlgerie.Modules.POS
             }
             else
             {
-                currentTicket.ticketType = TicketType.TABLE;
-                currentTicket.Numero = Numero;
+                bool DoJumle = false;
+                if (tickets.Select(a => a.Numero).Contains(Numero))
+                {
+                    var item = tickets.First(a => a.Numero == Numero);
+                    // JUMLAGE
+                    var response = MessageBox.Show("Table existe déja, jumeler les commandes?", "Jumler", MessageBoxButton.YesNo);
+                    if (response == MessageBoxResult.Yes)
+                    {
+                        DoJumle = true;
+                        var items = currentTicket.CarteLines;
+                        item.CarteLines.AddRange(items);
+
+                        tickets.Remove(currentTicket);
+                        currentTicket.ticketType = TicketType.TABLE;
+                        currentTicket.Numero = Numero;
+                    }
+                    else
+                    {
+                        RequestClose();
+                    }
+                }
+                else
+                {
+                    currentTicket.ticketType = TicketType.TABLE;
+                    currentTicket.Numero = Numero;
+                }
                 this.RequestClose();
             }
         }

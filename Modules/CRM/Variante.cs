@@ -23,7 +23,7 @@ namespace ErpAlgerie.Modules.CRM
     {
 
         public override bool Submitable { get; set; } = false;
-        public override string ModuleName { get; set; } = "Paramétres";
+        public override string ModuleName { get; set; } = "STOCK";
         public override string CollectionName { get; } = "Variante";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
         public override string IconName { get; set; } = "ContentCut";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,42 @@ namespace ErpAlgerie.Modules.POS
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CatScroller.LineUp();
+            CatScroller.LineUp();
+            CatScroller.LineUp();
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            CatScroller.LineDown();
+            CatScroller.LineDown();
+            CatScroller.LineDown();
+            CatScroller.LineDown();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                ProductScroller.LineUp();
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
+            for (int i = 0; i < 25; i++)
+            {
+
+                ProductScroller.LineDown();
+            }
+
+            
         }
     }
 }

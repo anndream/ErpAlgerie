@@ -20,7 +20,7 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = true;
-        public override string ModuleName { get; set; } = "VENTE";
+        public override string ModuleName { get; set; } = "PDV";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string CollectionName { get; } = "Facture de vente";
         public override string IconName { get; set; } = "Book";
@@ -129,7 +129,7 @@ namespace ErpAlgerie.Modules.CRM
         public decimal RemiseSurHt { get; set; }
 
         [SetColumn(2)]
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [DisplayName("Montant HT.")]
         public decimal MontantHT
         {
@@ -146,7 +146,7 @@ namespace ErpAlgerie.Modules.CRM
         public decimal RemisePourcentageSurTotal { get; set; }
 
         [SetColumn(2)]
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [DisplayName("Montant total HT.")]
         public decimal MontantTotalHT
         {
@@ -181,7 +181,7 @@ namespace ErpAlgerie.Modules.CRM
 
 
         [SetColumn(2)]
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [DisplayName("Somme taxes")]
         public decimal MontantTaxes
         {
@@ -203,7 +203,7 @@ namespace ErpAlgerie.Modules.CRM
 
 
         [SetColumn(2)]
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [DisplayName("Montant TTC.")]
         public decimal MontantTTC
         {
@@ -217,7 +217,7 @@ namespace ErpAlgerie.Modules.CRM
         [SetColumn(2)]
         [IsBold(true)]
         [ShowInTable]
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [DisplayName("Montant Global TTC.")]
         public decimal MontantGlobalTTC
         {
@@ -263,7 +263,9 @@ namespace ErpAlgerie.Modules.CRM
         [ColumnAttribute(ModelFieldType.Lien, "Stock")]
         public ObjectId? Stock { get; set; } = ObjectId.Empty;
 
-
+        [DisplayName("N° Commande")]
+        [Column(ModelFieldType.Numero,"")]
+        public int Position { get; set; }
 
 
         [DisplayName("Remarques")]
@@ -425,6 +427,7 @@ namespace ErpAlgerie.Modules.CRM
                 es.DateEcriture = this.DateCreation;
                 es.ObjetEcriture = "Sortie de Matériel";
                 es.Remarques = $"à partir du facture {this.Name}";
+                es.RefFacture = this.Id;
                 foreach (var item in this.ArticleFacture)
                 {
                     var line = new LigneEcritureStock();
@@ -442,6 +445,7 @@ namespace ErpAlgerie.Modules.CRM
             ej.CompteJournal = CompteSettings.getInstance().CompteDebiteur;
             ej.MontantDebit = this.MontantGlobalTTC;
             ej.MontantCredit = 0;
+            
             ej.ObjetEcriture = "Facture de vente";
             ej.RefDate = this.DateCreation;
             ej.RefNumber = this.Name;
@@ -491,9 +495,23 @@ namespace ErpAlgerie.Modules.CRM
         {
             var ecriturePaiement = DS.db.GetAll<EcriturePaiment>(a => a.RefFacture == this.Id) as IEnumerable<EcriturePaiment>;
             var ecritureStock = DS.db.GetAll<EcritureStock>(a => a.RefFacture == this.Id) as IEnumerable<EcritureStock>;
-
+            var ecriturejournal = DS.db.GetAll<EcritureJournal>(a => a.RefNumber == this.Name) as IEnumerable<EcritureJournal>;
+            
 
             var result = base.Cancel();
+            if (!result)
+                return false;
+
+
+            if (ecriturejournal != null && result == true)
+            {
+                foreach (var item in ecriturejournal)
+                {
+                    if (!item.Cancel())
+                        continue;
+                }
+            }
+
             if (ecriturePaiement != null && result == true)
             {
                 foreach (var item in ecriturePaiement)
@@ -522,21 +540,34 @@ namespace ErpAlgerie.Modules.CRM
             
             var ecriturePaiement = DS.db.GetAll<EcriturePaiment>(a => a.RefFacture == this.Id) as IEnumerable<EcriturePaiment>;
             var ecritureStock = DS.db.GetAll<EcritureStock>(a => a.RefFacture == this.Id) as IEnumerable<EcritureStock>;
+            var ecriturejournal = DS.db.GetAll<EcritureJournal>(a => a.RefNumber == this.Name) as IEnumerable<EcritureJournal>;
+
+
 
             var result = base.Delete(ConfirmFromUser);
             if (ecriturePaiement != null && result == true)
             {
                 foreach (var item in ecriturePaiement)
                 {
-                    if (!item.Delete())
+                    if (!item.Delete(false))
                         continue;
                 }
             }
+
+            if (ecriturejournal != null && result == true)
+            {
+                foreach (var item in ecriturejournal)
+                {
+                    if (!item.Delete(false))
+                        continue;
+                }
+            }
+
             if (ecritureStock != null && result == true)
             {
                 foreach (var item in ecritureStock)
                 {
-                    if (!item.Delete())
+                    if (!item.Delete(false))
                         continue;
                 }
             }

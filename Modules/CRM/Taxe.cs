@@ -12,16 +12,27 @@ namespace ErpAlgerie.Modules.CRM
 {
     class Taxe : ModelBase<Taxe>
     {
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Stock";
-        [BsonIgnore]
-        public override string SubModule { get; set; } = "Articles et prix";
-        [BsonIgnore]
-        public override string IconName { get; set; } = "Gears";
+
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "COMPTES";
+        public override string CollectionName { get; } = "Taxes";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        public override string IconName { get; set; } = "DecimalIncrease";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        #endregion
+        #region NAMING
+
+        public override string NameField { get; set; } = "Designiation";
 
 
 
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        #endregion
+         
+
+         
 
         public override void Validate()
         {
@@ -33,20 +44,11 @@ namespace ErpAlgerie.Modules.CRM
                 throw new Exception("Designiation est obligatoire");
 
         }
-        public override string Name
-        {
-            get
-            {
-                return Designiation;
-            }
-            set => base.Name = value;
-        }
-
+      
         public Taxe()
         {
 
-        }
-        public override string CollectionName { get; } = "Taxes";
+        } 
 
         internal override ExtendedDocument Map(string mappedClass)
         {

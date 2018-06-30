@@ -38,7 +38,7 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Taux de ligne précédente")]
         public bool PreviousMnt { get; set; }
 
-        [ColumnAttribute(ModelFieldType.Devise, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.Devise, "{0} DA")]
         [ShowInTable(true)] 
         [DisplayName("Taux précédent")]
         public decimal TauxPrecedent { get; set; }
@@ -49,7 +49,7 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Montant HT")]
         public decimal MontantHT { get; set; }
 
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [ShowInTable(true)]
         [IsBoldAttribute(true)]
         [DisplayName("Montant taxe")]
@@ -69,7 +69,7 @@ namespace ErpAlgerie.Modules.CRM
             }
         }
 
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [ShowInTable(true)]
         [IsBoldAttribute(false)]
         [DisplayName("Montant total")]

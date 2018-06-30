@@ -8,7 +8,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ErpAlgerie.Pages.Reports"
              mc:Ignorable="d" 
-             Language="fr-DZ"
+             Language="ar-DZ"
             
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -23,11 +23,13 @@
                     Margin="10 0" VerticalAlignment="Center"
                     Text="{Binding Report.ReportName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Style="{StaticResource ToolBarAction}" Content="Actualiser" Margin="0" MinHeight="10" Padding="5 0" Command="{s:Action refresh}"/>
+
+                <Button Style="{StaticResource ToolBarAction}" Content="Imprimer" Margin="5 0" MinHeight="10" Padding="5 0" Command="{s:Action PrintReport}"/>
             </StackPanel>
         </Grid>
 
 
-        <local:TreeListView AllowsColumnReorder="True" Language="fr-DZ"
+        <local:TreeListView AllowsColumnReorder="True" Language="ar-DZ"
                             materialDesign:DataGridAssist.ColumnHeaderPadding="7 2 2 2"
                             ItemsSource="{Binding Items,IsAsync=True, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
             <!--Create an item template to specify the ItemsSource-->

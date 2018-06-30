@@ -14,11 +14,25 @@ namespace ErpAlgerie.Modules.CRM
 {
     public class AccesRule : ModelBase<AccesRule>
     {
-        public override string ModuleName { get; set; } = "Configuration";
-        public override bool Submitable { get; set; } = false;
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
-        public override bool ShowInDesktop { get; set; } = true;
 
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Régles d'autorisations";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "LockOpenOutline";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        #endregion
+
+        #region NAMING
+
+        public override string Name { get { return Naming(); } set => base.Name = value; }
+
+
+        #endregion
+         
 
         public override void Validate()
         {
@@ -28,9 +42,7 @@ namespace ErpAlgerie.Modules.CRM
         public AccesRule()
         {
         }
-        public override string CollectionName { get; } = "Régles d'autorisations";
-        public override string Name { get { return Naming() ; } set => base.Name = value; }
-
+       
          
         [ShowInTableAttribute(false)]
         [DisplayName("Module")]

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             
     xmlns:currency="clr-namespace:CurrencyTextBoxControl;assembly=CurrencyTextBoxControl"
-     xml:lang="fr-DZ"
+     xml:lang="ar-DZ"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
           xmlns:s="https://github.com/canton7/Stylet" 
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
@@ -61,7 +61,7 @@
                                 
                               />
 
-                    <Button Command="{s:Action Close}"
+                    <Button Command="{s:Action Close}" 
                         Click="button_Copy1_Click" 
                         Custom:VisibilityHelper.IsVisible="{Binding fermerVisible, Mode=OneWay, 
                         UpdateSourceTrigger=PropertyChanged}"
@@ -75,7 +75,7 @@
                     Custom:ControlsHelper.ContentCharacterCasing="Normal"
                     FontWeight="Normal" FontSize="12" Height="29" HorizontalAlignment="Right" Width="90"  />
 
-                    <Button Command="{s:Action Save}"
+                    <Button Command="{s:Action Save}" 
                             x:Name="button_Copy" Focusable="False" 
                     Custom:ButtonHelper.CornerRadius="2"  
                     Content="{Binding btnName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
@@ -115,7 +115,7 @@
         <ScrollViewer Margin="0 0 0 25" DockPanel.Dock="Top" 
                       HorizontalAlignment="Stretch"  Padding="0 0">
             <StackPanel >
-                <WrapPanel   Language="fr-DZ"  Orientation="Horizontal"  Margin="0" MinHeight="0" Height="auto"  Width="820" HorizontalAlignment="Center">
+                <WrapPanel   Language="ar-DZ"  Orientation="Horizontal"  Margin="0" MinHeight="0" Height="auto"  Width="820" HorizontalAlignment="Center">
 
                     <ContentControl Content="{Binding DocImageContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                             Height="auto" Margin="0 10"
@@ -147,11 +147,11 @@
                     </Border>
                     </StackPanel>
                     <WrapPanel Margin="0" Orientation="Horizontal">
-                        <ContentControl Language="fr-DZ" Content="{Binding DocCardOne, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                        <ContentControl Language="ar-DZ" Content="{Binding DocCardOne, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                             Height="auto" Foreground="Black" Padding="0"   HorizontalAlignment="Right" materialDesign:ShadowAssist.ShadowDepth="Depth0"
                               Margin="10 10 5 5" />
 
-                        <ContentControl Language="fr-DZ" Content="{Binding DocCardTow, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                        <ContentControl Language="ar-DZ" Content="{Binding DocCardTow, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                             Height="auto" Foreground="Black"    HorizontalAlignment="Right" materialDesign:ShadowAssist.ShadowDepth="Depth0"
                               Margin="5 10 5 5" />
                     </WrapPanel>
@@ -166,7 +166,7 @@
 
                 <materialDesign:Card
                              Margin="0 3 0 20"
-                             materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth1"
                         HorizontalAlignment="Center"  VerticalAlignment="Top" 
                              Background="White"  >
 
@@ -246,36 +246,38 @@
                Height="27"
                >
 
-            <StackPanel VerticalAlignment="Center"  Orientation="Horizontal">
-                <ToggleButton  Margin="10 0 0 0"  IsChecked="{Binding CollapseAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock TextAlignment="Justify" Text="Ouvrir tout" VerticalAlignment="Center" Margin="0 0 20 0"/>
-                <CheckBox HorizontalAlignment="Left" IsChecked="{Binding model.isHandled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Est traité" Width="81" />
+            <StackPanel VerticalAlignment="Center"   Orientation="Horizontal">
+                <ToggleButton   IsChecked="{Binding CollapseAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock VerticalAlignment="Center" Text="Ouvrir tout"  />
+                <!--<CheckBox VerticalAlignment="Center" HorizontalAlignment="Left"
+                          IsChecked="{Binding model.isHandled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Est traité" Width="81" />-->
                 <StackPanel Orientation="Horizontal" Margin="10,0">
                     <Separator Foreground="Black" Background="Black" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 </StackPanel>
-                <Label Content="Date de création : " Foreground="DarkGray" Padding="0,2" FontSize="12"/>
-                <DatePicker  FontSize="10" Padding="0" 
-                             SelectedDate="{Binding model.AddedAtUtc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0" MinHeight="10"  Width="120" />
-                <Label Foreground="DarkOrange" ContentStringFormat="# {0}" 
-                       FontSize="11"
-                       Content="{Binding GlobalMsg, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="2" HorizontalAlignment="Right" Width="200" />
-                <TextBlock Text="{Binding model.CreatedByName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Content="Date de création : " VerticalAlignment="Center"   />
+                <DatePicker  VerticalAlignment="Center"
+                             SelectedDate="{Binding model.AddedAtUtc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                <Label  ContentStringFormat="# {0}" 
+                       VerticalAlignment="Center"
+                       Content="{Binding GlobalMsg, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                <Label VerticalAlignment="Center" Content="{Binding model.CreatedByName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding model.Id, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button HorizontalAlignment="Right" 
-                    Foreground="DarkGray" Command="{s:Action ShowProperties}"
+                <Button HorizontalAlignment="Right" Style="{StaticResource LinkButton}"
+                     Command="{s:Action ShowProperties}"  
                     Content="Afficher les champs" BorderBrush="{x:Null}" 
-                    Background="{x:Null}" Height="Auto"  Padding="5"></Button>
+                    Background="{x:Null}" Height="Auto"  Margin="5"></Button>
 
                 <Button HorizontalAlignment="Right"
-                    Command="{s:Action Dupliquer}" Margin="0 0"
-                    Foreground="DarkGray" Padding="5"
+                    Command="{s:Action Dupliquer}"  
+                    Style="{StaticResource LinkButton}" Margin="5"
                     Content="Dupliquer" BorderBrush="{x:Null}" 
                     Background="{x:Null}" Height="Auto" ></Button>
 
                 <Button HorizontalAlignment="Right"
-                    Command="{s:Action CreerNouveau}" Padding="5"
-                    Foreground="DarkGray"
+                    Command="{s:Action CreerNouveau}" Margin="5"  
+                   Style="{StaticResource LinkButton}"
                     Content="Créer nouveau" BorderBrush="{x:Null}" 
                     Background="{x:Null}" Height="Auto"  ></Button>
             </StackPanel>

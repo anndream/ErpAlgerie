@@ -190,10 +190,11 @@ namespace ErpAlgerie.Pages.Template
                 DataHelpers.windowManager.ShowMessageBox("Vérifier les conditions");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(Valeur))
+            if (string.IsNullOrEmpty(Valeur))
             {
-                DataHelpers.windowManager.ShowMessageBox("Vérifier les valeurs");
-                return;
+                Valeur = " ";
+                //DataHelpers.windowManager.ShowMessageBox("Vérifier les valeurs");
+                //return;
             }
 
             var query = Inputs ;
@@ -516,5 +517,11 @@ namespace ErpAlgerie.Pages.Template
         public void Dispose()
         {
          }
+
+        public  void showAll()
+        {
+            Result = Inputs;
+            this.RequestClose(true);
+        }
     }
 }

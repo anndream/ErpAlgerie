@@ -14,11 +14,68 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Globalization;
 
+    
 namespace ErpAlgerie.Modules.Core
 {
     public static class FrameworkManager
     {
+
+        public static void ReloadModules()
+        {
+            var modules = DataHelpers.GetMongoDataSync("ModuleErp") as IEnumerable<ModuleErp>;
+            DataHelpers.Modules = modules as IEnumerable<ModuleErp>;
+            var collections = modules.Select(z => z.Libelle).ToList();
+            string nspace = "ErpAlgerie.Modules.CRM";
+
+            var q = from t in Assembly.GetExecutingAssembly().GetTypes()
+                    where t.IsClass && t.Namespace == nspace
+                    && (t.IsSubclassOf(typeof(ExtendedDocument))
+                    && !typeof(NoModule).IsAssignableFrom(t))
+                    select t;
+            q.ToList().ForEach(t =>
+            {
+                try
+                {
+                    Console.Write(t.Name);
+                    var instance = Activator.CreateInstance(t);
+                    var collection = t.GetProperty("CollectionName").GetValue(instance)?.ToString();
+                    if (!collections.Contains(collection))
+                    {
+                       
+                    var moduleName = t.GetProperty("ModuleName").GetValue(instance)?.ToString();
+                    var iconName = t.GetProperty("IconName").GetValue(instance)?.ToString();
+                    var showInDesktop = t.GetProperty("ShowInDesktop").GetValue(instance) as bool?;
+                    var isInstance = bool.Parse(t.GetProperty("IsInstance").GetValue(instance)?.ToString());
+                    if (!string.IsNullOrWhiteSpace(moduleName))
+                    {
+                        Console.Write("EXIT");
+                    }
+                    var moduleErp = new ModuleErp();
+                    moduleErp.Libelle = collection;
+                    moduleErp.EstAcceRapide = showInDesktop.Value;
+                    moduleErp.ClassName = $"{nspace}.{t.Name}";
+                    moduleErp.GroupeModule = moduleName;
+                    moduleErp.ModuleIcon = iconName;
+                    moduleErp.ModuleSubmitable = (instance as ExtendedDocument).Submitable;
+                    moduleErp.IsInstanceModule = isInstance;
+                    moduleErp.Save();
+
+                    }
+                }
+                catch (Exception s)
+                {
+                    Console.WriteLine("ERROR\n");
+                    Console.WriteLine(s.Message);
+                }
+
+            }
+            );
+
+            modules = DataHelpers.GetMongoDataSync("ModuleErp") as IEnumerable<ModuleErp>;
+            DataHelpers.Modules = modules ;
+        }
 
         public static void UpdateModules(bool DoUpdate = true)
         {
@@ -69,6 +126,7 @@ namespace ErpAlgerie.Modules.Core
                         moduleErp.ClassName = $"{nspace}.{t.Name}";
                         moduleErp.GroupeModule = moduleName;
                         moduleErp.ModuleIcon = iconName;
+                        moduleErp.ModuleSubmitable = (instance as ExtendedDocument).Submitable;
                         moduleErp.IsInstanceModule = isInstance;
                         moduleErp.Save();
                     }
@@ -117,6 +175,48 @@ namespace ErpAlgerie.Modules.Core
         {
             return true;
         }
+
+
+
+
+        // Check if series in database
+        public static void CreateSeries(bool DeleteOldSeries = true)
+        {
+            if (DeleteOldSeries)
+            {
+                var oldseries = DS.db.GetAll<SeriesName>(a => true) as IEnumerable<SeriesName>;
+                DS.db.DeleteMany(oldseries);
+            }
+
+            var modulesWithSeries = DS.db.GetAll<ModuleErp>(a => true) as IEnumerable<ModuleErp>;
+            if(modulesWithSeries != null)
+            {
+
+                foreach (var module in modulesWithSeries)
+                {
+                    try
+                    {
+                        var serie = new SeriesName();
+                        serie.Libelle = module.Name;
+                        serie.Sufix = new string(module.Libelle.Take(2).ToArray()).ToUpper() + "-########";
+                        serie.Indexe = 1;
+                        serie.ForceIgniorValidatUnique = true;
+                        serie.Save();
+                        module.SeriesNames = new List<SeriesName>();
+                        module.SeriesNames.Add(serie);
+                        module.SeriesDefault = serie.Id;
+                        module.Save();
+                    }
+                    catch (Exception s)
+                    {
+                        DataHelpers.Logger.LogError(s);
+                        throw s;
+                    }
+                }
+            }
+
+        }
+
 
 
         // Check if admin user exist in database
@@ -210,6 +310,16 @@ namespace ErpAlgerie.Modules.Core
             File.WriteAllText("License.lic", license.ToString(), Encoding.UTF8);
         }
 
+        internal static void CleanFiles()
+        {
+            var files = Directory.EnumerateFiles("temp");
+            foreach (var item in files)
+            {
+                try { File.Delete(item); } catch { Console.WriteLine("Can't delete...!"); }
+            
+            }
+        }
+
         public static string PrivateKey = "MIICITAjBgoqhkiG9w0BDAEDMBUEEFTGdTEj3djRVchSDv2vrBoCAQoEggH4ow+DkQNlHuB0whG0h51pCMcLuwTrjArybmVZM+PiTRbEnF65d9D4l8t276OEEOmUd07O30RTEEQnm+1+fv7eNmJ8xfzRXqS0/oCm2WjtGxlxQY7DlxctpSlJVLTgI27TuMN6tky6C8EGais35bZAJsbMCCcw6I1BCMUV6ZlCYgvTPSAOIg+Vh8LZUrRbxE/CJ6Ly+BPNlTCHzeqKIkBCoruxMXQEJuLqbbsP0HgiRKeDnowL2Xq/QzbXTi4BjUs26E5Rm2gOoZvf/BxnnPMtpxaRmL0QJ4aQKO1Jk/WkmO6YjG0pTi2XXn4u9cOmh/8q54CFfr7Y2Y3zDbBLeVYPrI8V1l6zcD0pi7S8VDgSpY1RkrAqgvTSlW7bERSAgW69kBRuG4SDZPesGj9AgRcqU8SKq8VSGXwTypv8yyHAkXKbEUdhFueHyRZhltqgjGMc90AYRjD4sjZ+zC6oM5fEGG/T0NB8/VodGyUwAbxttIwI820JoJBwhzQYMyqeICpIQb4O6DljCSXDuKxTHuG/0uaWnjAdT6GSydDvejkA9DVZMMyN0+Wl8l8+ywokwKsSm38WQ29PyAwXN8wBnLm8AYqxBi8fotj+b0wSLSXo6w5NCuKljgzBPXhHM4Ri4P2xa/9GJo/dOkLtbMoLPAUqFnMKkdO7HNuu";
         public static void CreateLicenceTrial(string username,string email)
         {
@@ -239,6 +349,14 @@ namespace ErpAlgerie.Modules.Core
             settings.Save();
 
             File.WriteAllText("License.lic", license.ToString(), Encoding.UTF8);
+        }
+
+        internal static void CreateCulture()
+        {
+
+            
+
+
         }
 
         internal static void CheckValidation()

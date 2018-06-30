@@ -2,6 +2,7 @@
 using DoddleReport;
 using DoddleReport.Writers;
 using ErpAlgerie.Modules.Core.Module;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -104,6 +105,9 @@ namespace ErpAlgerie.Modules.Core.Helpers
             try
             {
                 // Get the data for the report (any IEnumerable will work) 
+
+
+
                 var query = items.ToList();
 
                 // Create the report and turn our query into a ReportSource 
@@ -127,11 +131,25 @@ namespace ErpAlgerie.Modules.Core.Helpers
 
                         try
                         {
-                            report.DataFields[item.Name].Hidden = true;
 
+                            
+
+                            if(item.PropertyType == typeof(decimal) || item.PropertyType  == typeof(int))
+                            {
+                                report.DataFields[item.Name].ShowTotals = true;
+                            }
+                            report.DataFields[item.Name].Hidden = true;
+                            
 
                             if (choosedPrperties.Contains(item))
                                 report.DataFields[item.Name].Hidden = false;
+
+                            if (item.PropertyType.FullName.Contains("ObjectId") || item.PropertyType.FullName.Contains("List"))
+                            {
+                                report.DataFields[item.Name].Hidden = true;
+                            }
+
+
                             //var showInTable = item.GetCustomAttribute(typeof(ShowInTableAttribute)) as ShowInTableAttribute;
                             //var display = item.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
                             //if (display != null && display.DisplayName != "Crée le" && display.DisplayName != "Status" && showInTable?.IsShow == true)
@@ -146,6 +164,27 @@ namespace ErpAlgerie.Modules.Core.Helpers
                         {
                             continue;
                         }
+
+                    }
+
+                    foreach (var row in report.Source.GetItems())
+                    {
+                        //var objectid = row.GetType().GetProperties().Where(z => z.PropertyType.FullName.Contains("ObjectId"));
+                        //foreach (var oi in objectid)
+                        //{
+                        //    ObjectId? value = (ObjectId)oi.GetValue(row);
+                        //    if (value != null)
+                        //    {
+                        //        var link = oi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                        //        if (link.FieldType == ModelFieldType.Lien )
+                        //        {
+                        //           // report.
+                        //           // oi.SetValue(row, value?.GetObject(link.Options)?.Name);
+                        //        }
+
+                        //    }
+
+                        //}
 
                     }
                 }

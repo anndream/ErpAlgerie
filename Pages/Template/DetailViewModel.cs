@@ -51,8 +51,8 @@ namespace ErpAlgerie.Pages.Template
 
             (model as ExtendedDocument).CloseEvent += DetailViewModel_CloseEvent;
             // Change culture
-            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("fr-DZ");
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("fr-DZ");
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-DZ");
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ar-DZ");
 
             if (!FrameworkManager.CanView(t))
             {
@@ -127,7 +127,7 @@ namespace ErpAlgerie.Pages.Template
                 carOneContent.Children.Add(st);
                 carOneContent.Background = Brushes.White;
                 DocCardOne.Content = carOneContent;
-                ShadowAssist.SetShadowDepth(DocCardOne, ShadowDepth.Depth1);
+                 ShadowAssist.SetShadowDepth(DocCardOne, ShadowDepth.Depth0);
                 ShadowAssist.SetShadowEdges(DocCardOne, ShadowEdges.Left);
                 DocCardOne.Padding = new Thickness(5);
                 NotifyOfPropertyChange("DocCardOne");
@@ -174,7 +174,7 @@ namespace ErpAlgerie.Pages.Template
                 carTowContent.Children.Add(st);
                 carTowContent.Background = Brushes.White;
                 DocCardTow.Content = carTowContent;
-                ShadowAssist.SetShadowDepth(DocCardTow, ShadowDepth.Depth1);
+                ShadowAssist.SetShadowDepth(DocCardTow, ShadowDepth.Depth0);
                 ShadowAssist.SetShadowEdges(DocCardTow, ShadowEdges.Left);
                 DocCardTow.Padding = new Thickness(5);
                 NotifyOfPropertyChange("DocCardTow");
@@ -1143,9 +1143,12 @@ namespace ErpAlgerie.Pages.Template
 
 
         
-        private async Task Setup()
+        private async Task Setup(int delay = 0)
         {
-             
+
+            if (delay > 0)
+                Thread.Sleep(delay);
+
             (model as ExtendedDocument).IsSelectedd = false;
             if(!FinishLoaded)
             { 
@@ -1205,10 +1208,13 @@ namespace ErpAlgerie.Pages.Template
             };
             actualiser.Style = App.Current.FindResource("SideToolButton") as Style;
             actualiser.Click += Actualiser_Click;
+            actualiser.TouchDown += Actualiser_Click;
+
 
             Button Exporter = new Button();
             Exporter.Tag = "PDF";
             Exporter.Click += Exporter_Click; ;
+            Exporter.TouchDown += Exporter_Click; ;
             Exporter.Content = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
@@ -1226,6 +1232,7 @@ namespace ErpAlgerie.Pages.Template
             Button ExporterOffice = new Button();
             ExporterOffice.Tag = "OFFICE";
             ExporterOffice.Click += Exporter_Click; ;
+            ExporterOffice.TouchDown += Exporter_Click; ;
             ExporterOffice.Content = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
@@ -1243,6 +1250,7 @@ namespace ErpAlgerie.Pages.Template
 
             Button delete = new Button();
             delete.Click += Delete_Click; ;
+            delete.TouchDown += Delete_Click; ;
             delete.Content = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,                
@@ -1454,7 +1462,7 @@ namespace ErpAlgerie.Pages.Template
                                 {
                                     var text = longDescription.text;
                                     TextBlock tbLong = new TextBlock();
-                                    tbLong.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#D3D3D3");
+                                    tbLong.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                     tbLong.TextWrapping = TextWrapping.Wrap;
                                     tbLong.Width = elementWidth;
                                     tbLong.Text = text;
@@ -1476,7 +1484,7 @@ namespace ErpAlgerie.Pages.Template
                                 datePicker.SelectedDateChanged += DatePicker_SelectedDateChanged2;
                                 Border brDate = new Border();
                                 brDate.BorderThickness = new Thickness(1);
-                                brDate.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#CCCCCC");
+                                brDate.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                 brDate.CornerRadius = new CornerRadius(5);
                                 brDate.Padding = new Thickness(1);
                                 brDate.Background = Brushes.White;
@@ -1505,9 +1513,11 @@ namespace ErpAlgerie.Pages.Template
 
                                  
                                     btnViewDate.Tag = datePicker;
-                                    btnViewDate.Click += BtnViewDate_Click;   
+                                btnViewDate.Click += BtnViewDate_Click;
+                                btnViewDate.TouchDown += BtnViewDate_Click;
 
-                                    datePicker.Width = elementWidth - 55;
+
+                                datePicker.Width = elementWidth - 55;
                                 datePicker.VerticalAlignment = VerticalAlignment.Bottom;
                                 datePicker.VerticalContentAlignment = VerticalAlignment.Bottom;
                                 StackPanel sp1date = new StackPanel();
@@ -1546,7 +1556,7 @@ namespace ErpAlgerie.Pages.Template
                               //  tbDevise.Height = 20;
                                var myBindingDevise = new Binding(prop.Name);
                                 myBindingDevise.Source = model;
-                                myBindingDevise.ConverterCulture = new System.Globalization.CultureInfo("fr-DZ");
+                                myBindingDevise.ConverterCulture = new System.Globalization.CultureInfo("ar-DZ");
                                 myBindingDevise.StringFormat = !string.IsNullOrWhiteSpace(DataHelpers.Settings.FormatDevis) ? DataHelpers.Settings.FormatDevis : "{0:C}" ;
                                 myBindingDevise.Mode = BindingMode.TwoWay;
                                 myBindingDevise.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
@@ -1644,7 +1654,7 @@ namespace ErpAlgerie.Pages.Template
 
                                 Border brSelect = new Border();
                                 brSelect.BorderThickness = new Thickness(1);
-                                brSelect.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#CCCCCC");
+                                brSelect.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                 brSelect.CornerRadius = new CornerRadius(5);
                                 brSelect.Padding = new Thickness(1);
                                 brSelect.Background = Brushes.White;
@@ -1712,6 +1722,7 @@ namespace ErpAlgerie.Pages.Template
                                 //border.BorderThickness = new Thickness(0);
                                 //border.Child = checkbox;
                                 checkbox.Click += Checkbox_Click;
+                                checkbox.TouchDown += Checkbox_Click;
                                 label.FontSize = 12;
                                 label.FontWeight = FontWeights.Normal;
                                 sp.Children.Add(checkbox);
@@ -1797,7 +1808,7 @@ namespace ErpAlgerie.Pages.Template
 
                                 Border br = new Border();
                                 br.BorderThickness = new Thickness(1);
-                                br.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#CCCCCC");
+                                br.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                 br.CornerRadius = new CornerRadius(5);
                                 br.Padding = new Thickness(1);
                                 br.Background = Brushes.White;
@@ -1834,7 +1845,7 @@ namespace ErpAlgerie.Pages.Template
                                 box.SetBinding(ComboBox.DisplayMemberPathProperty, new Binding { Source = $"Name" });
                                 box.SelectedValuePath = "Id";
                                 //  box.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                box.Width = elementWidth - 65;
+                                box.Width = elementWidth - 62;
                                
                                
                                 Button btnView = new Button();
@@ -1849,11 +1860,13 @@ namespace ErpAlgerie.Pages.Template
                                 var clsBox = new ArrayList() { optionLien, prop.Name };
                                 box.Tag = clsBox;
                                 box.MouseDoubleClick += Box_MouseDoubleClick;
+                                
 
 
 
                                 btnView.Tag = clsLien;
                                 btnView.Click += BtnView_Click1;
+                                btnView.TouchDown += BtnView_Click1;
 
                                 btnView.Margin = new Thickness(2);
                                 btnView.Padding = new Thickness(2);
@@ -1865,6 +1878,7 @@ namespace ErpAlgerie.Pages.Template
                                 //  btnAdd.Style = App.Current.FindResource("MaterialDesignFloatingActionMiniDarkButton") as Style;
                                 btnAdd.Tag = new ArrayList() { $"ErpAlgerie.Modules.CRM.{optionLien}", prop.Name };
                                 btnAdd.Click += BtnAdd_Click;
+                                btnAdd.TouchDown += BtnAdd_Click;
                                 btnAdd.Margin = new Thickness(2);
                                 btnAdd.Padding = new Thickness(2);
                                 btnAdd.HorizontalAlignment = HorizontalAlignment.Right;
@@ -1916,7 +1930,7 @@ namespace ErpAlgerie.Pages.Template
                                 myBinding = new Binding(prop.Name);
                                 myBinding.Source = model;
                                 myBinding.Mode = BindingMode.OneWay;
-                                myBinding.ConverterCulture = new System.Globalization.CultureInfo("fr-DZ");
+                                myBinding.ConverterCulture = new System.Globalization.CultureInfo("ar-DZ");
                                 myBinding.StringFormat = format;
                                 myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                                 tbReadOnly.SetBinding(TextBox.TextProperty, myBinding);
@@ -1967,6 +1981,7 @@ namespace ErpAlgerie.Pages.Template
                                 var tagLien = new ArrayList() { propName, optionLienButton };
                                 newMenu.Tag = tagLien;
                                 newMenu.Click += NewMenu_Click;
+                                newMenu.TouchDown += NewMenu_Click;
                                 newMenu.HorizontalAlignment = HorizontalAlignment.Left;
                                 newMenu.HorizontalContentAlignment = HorizontalAlignment.Left;
 
@@ -1984,6 +1999,7 @@ namespace ErpAlgerie.Pages.Template
                                     btnAddLien.Style = App.Current.FindResource("LinkButtonPlus") as Style;
                                     btnAddLien.Tag = tagLien;
                                     btnAddLien.Click += BtnAddLien_Click;
+                                    btnAddLien.TouchDown += BtnAddLien_Click;
 
                                     stackLienContent.Children.Add(btnAddLien);
                                 }
@@ -2017,11 +2033,12 @@ namespace ErpAlgerie.Pages.Template
                                 Border b = new Border();
                                 b.BorderThickness = new Thickness(1);
                                 b.CornerRadius = new CornerRadius(5);
-                                b.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#D3D3D3");
+                                b.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                 Button addBtn = new Button();
                                 addBtn.Tag = prop.Name;
                                 addBtn.Content = "Changer";
                                 addBtn.Click += AddBtn_Click;
+                                addBtn.TouchDown += AddBtn_Click;
                                 addBtn.VerticalAlignment = VerticalAlignment.Bottom;
                                 addBtn.Height = 26;
                                 addBtn.Width = elementWidth;
@@ -2066,6 +2083,7 @@ namespace ErpAlgerie.Pages.Template
                                 addBtnSide.Tag = prop.Name;
                                 addBtnSide.Content = optionImageSide;
                                 addBtnSide.Click += AddBtn_Click;
+                                addBtnSide.TouchDown += AddBtn_Click;
                                 addBtnSide.VerticalAlignment = VerticalAlignment.Bottom;
                                 addBtnSide.Height = 26;
                                 addBtnSide.Width = 180;
@@ -2160,6 +2178,7 @@ namespace ErpAlgerie.Pages.Template
                                 MenuItem deleteItem = new MenuItem();
                                 deleteItem.Header = "Supprimer";
                                 deleteItem.Click += DeleteItem_Click;
+                                deleteItem.TouchDown += DeleteItem_Click;
                                 deleteItem.IsEnabled = !isFreezed;
                                 deleteItem.Tag = listview;
                                 cm.Items.Add(deleteItem); 
@@ -2167,11 +2186,12 @@ namespace ErpAlgerie.Pages.Template
                                 MenuItem deleteAll = new MenuItem();
                                 deleteAll.Header = "Supprimer tout";
                                 deleteAll.Click += DeleteAll_Click; ;
+                                deleteAll.TouchDown += DeleteAll_Click; ;
                                 deleteAll.Tag = listview;
                                 deleteAll.IsEnabled = !isFreezed;
                                 cm.Items.Add(deleteAll);
                                 
-                                listview.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#CCCCCC"); ;
+                                listview.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0"); ;
                                 listview.BorderThickness = new Thickness(1);
                                 listview.FontSize = 14;
                                 listview.ContextMenu = cm;
@@ -2185,7 +2205,7 @@ namespace ErpAlgerie.Pages.Template
                                 listview.CanUserDeleteRows = !isFreezed;
                                // listview.IsReadOnly = true;
                                 listview.RowEditEnding += Listview_RowEditEnding;
-                               
+                                 
                                 listview.Unloaded += Listview_Unloaded;
                                 listview.MouseDoubleClick += Listview_MouseDoubleClick;
                                 var myBindingTable = new Binding(prop.Name);
@@ -2263,6 +2283,7 @@ namespace ErpAlgerie.Pages.Template
                                 btnSelect.Tag = cls;
                                 btnSelect.IsEnabled = !isFreezed;
                                 btnSelect.Click += BtnSelect_Click; ;
+                                btnSelect.TouchDown += BtnSelect_Click; ;
 
                                 // btn créer
                                 Button btnNewModel = new Button();
@@ -2274,6 +2295,7 @@ namespace ErpAlgerie.Pages.Template
                                 btnNewModel.IsEnabled = !isFreezed;
                                 btnNewModel.Tag = new ArrayList() { $"ErpAlgerie.Modules.CRM.{type.Name}", prop.Name };
                                 btnNewModel.Click += BtnNewModel_Click; ;
+                                btnNewModel.TouchDown += BtnNewModel_Click; ;
 
                                 // Button add
                                 btnAddModel = new Button();
@@ -2286,6 +2308,7 @@ namespace ErpAlgerie.Pages.Template
                                 btnAddModel.IsEnabled = !isFreezed;
                                 btnAddModel.Tag = tag2;
                                 btnAddModel.Click += BtnAddModel_Click;
+                                btnAddModel.TouchDown += BtnAddModel_Click;
 
                                 // Button delete all
                                 Button btnDeleteall = new Button();
@@ -2306,7 +2329,8 @@ namespace ErpAlgerie.Pages.Template
                                 btnUP.HorizontalAlignment = HorizontalAlignment.Right;
                                 btnUP.Tag = listview;
                                 btnUP.IsEnabled = !isFreezed;
-                                btnUP.Click += BtnDOWN_Click ;
+                                btnUP.Click += BtnDOWN_Click;
+                                btnUP.TouchDown += BtnDOWN_Click;
 
                                 // Button DOWN
                                 Button btnDOWN = new Button();
@@ -2318,6 +2342,7 @@ namespace ErpAlgerie.Pages.Template
                                 btnDOWN.Tag = listview;
                                 btnDOWN.IsEnabled = !isFreezed;
                                 btnDOWN.Click += BtnUP_Click;
+                                btnDOWN.TouchDown += BtnUP_Click;
 
 
                                 stackForButtons.Children.Add(Tablebox);
@@ -2333,6 +2358,7 @@ namespace ErpAlgerie.Pages.Template
                                 Grid.SetColumn(stackForButtons, 0);
                                 Grid.SetRow(stackForButtons, 0);
                                 btnDeleteall.Click += Btnaddline_Click;
+                                btnDeleteall.TouchDown += Btnaddline_Click;
                                 spsTable.Children.Add(listview);
                                 spsTable.Children.Add(stackForButtons);
                                 spsTable.Margin = new Thickness(0);
@@ -2404,7 +2430,7 @@ namespace ErpAlgerie.Pages.Template
 
                                 Border brField = new Border();
                                 brField.BorderThickness = new Thickness(1);
-                                brField.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#CCCCCC");
+                                brField.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFromString("#AFBFC0");
                                 brField.CornerRadius = new CornerRadius(5);
                                 brField.Padding = new Thickness(1);
                                 brField.Background = Brushes.White;
@@ -2555,8 +2581,9 @@ namespace ErpAlgerie.Pages.Template
                                 newOps.Style = App.Current.FindResource("ToolBarAction") as Style;
 
                                 
-                                newOps.Tag = optionnewOps; 
+                                newOps.Tag = optionnewOps;
                                 newOps.Click += NewOps_Click;
+                                newOps.TouchDown += NewOps_Click;
                                 opeartionButtons.Orientation = Orientation.Horizontal;                                 
                                 opeartionButtons.Children.Add(newOps); 
                                 addToPanel = false;
@@ -2571,6 +2598,7 @@ namespace ErpAlgerie.Pages.Template
                                 newMenuButton.Style = App.Current.FindResource("DetailButton") as Style;
                                 newMenuButton.Tag = optionButtonn;
                                 newMenuButton.Click += NewMenuButton_Click; ;
+                                newMenuButton.TouchDown += NewMenuButton_Click; ;
                                 border.Child = newMenuButton;
                                 sp.Children.Add(label);
                                 sp.Children.Add(border);
@@ -2713,8 +2741,8 @@ namespace ErpAlgerie.Pages.Template
             try
             {
                 if (e.EditAction == DataGridEditAction.Commit)
-                {
-                    await Setup();
+                { 
+                   // await Setup(500);
                 }
             }
             catch 

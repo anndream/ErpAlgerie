@@ -103,7 +103,7 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Résultats")]
         public string sepRes { get; set; }
 
-        [ColumnAttribute(ModelFieldType.ReadOnly, "{0:C}")]
+        [ColumnAttribute(ModelFieldType.ReadOnly, "{0} DA")]
         [IsBoldAttribute(true)]
         [ShowInTable(true)]
         [DisplayName("TOTAL H.T.")]

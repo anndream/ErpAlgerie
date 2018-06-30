@@ -27,18 +27,21 @@ namespace ErpAlgerie.Framework
             var btnDelete = new Button();
             btnDelete.Content = "X";
             btnDelete.Click += BtnDelete_Click;
+            btnDelete.TouchDown += BtnDelete_Click;
             stack.Children.Add(btnDelete);
 
 
             var btnTop = new Button();
             btnTop.Content = "TOP";
             btnTop.Click += BtnTop_Click; ;
+            btnTop.TouchDown += BtnTop_Click; ;
             stack.Children.Add(btnTop);
 
 
             var btnDown = new Button();
             btnDown.Content = "DOWN";
             btnDown.Click += BtnDown_Click;
+            btnDown.TouchDown += BtnDown_Click;
             stack.Children.Add(btnDown);
 
             contentOptions.Children.Add(stack);

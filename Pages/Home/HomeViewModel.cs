@@ -66,6 +66,7 @@ namespace ErpAlgerie.Pages.Home
                     btn.Style = App.Current.FindResource("HomeButton") as Style;
                     btn.Tag = item;
                     btn.Click += Btn_Click;
+                    btn.TouchDown += Btn_Click;
                     var ic = item.ModuleIcon;
                     StackPanel sp = new StackPanel() { Orientation = Orientation.Vertical };
                     sp.HorizontalAlignment = HorizontalAlignment.Center;
@@ -105,7 +106,7 @@ namespace ErpAlgerie.Pages.Home
             NotifyOfPropertyChange("MasterPanel");
         }
 
-        private async void Btn_Click(object sender, RoutedEventArgs e)
+        private async void Btn_Click(object sender, EventArgs e)
         {
             var modulerp = (sender as Button).Tag as ModuleErp;
              await DataHelpers.Shell.OpenModuleErp(modulerp); 

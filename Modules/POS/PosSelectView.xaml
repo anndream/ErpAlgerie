@@ -6,15 +6,16 @@
                    xmlns:s="https://github.com/canton7/Stylet" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:ErpAlgerie.Modules.POS"
-             mc:Ignorable="d" Height="340.225" Width="622.563">
+        Title="Type commande"
+             mc:Ignorable="d" Height="393.093" Width="622.563">
     <StackPanel Orientation="Horizontal" Background="Gray">
-        <Button Command="{s:Action SetPrePaye}" Margin="5" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="200" Width="200">
+        <Button Command="{s:Action SetPrePaye}" Margin="5,81,5,111" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="Auto" Width="200">
             <StackPanel HorizontalAlignment="Center" >
                 <materialDesign:PackIcon Kind="CartOutline" Width="80" Height="80"/>
                 <TextBlock Text="Prépayé" HorizontalAlignment="Center" Margin="5 10" FontSize="20"/>
             </StackPanel>
         </Button>
-        <Button Command="{s:Action SetTable}" Margin="5" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="200" Width="200">
+        <Button Command="{s:Action SetTable}" Margin="5,81,5,111" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="Auto" Width="200">
             <StackPanel HorizontalAlignment="Center" >
                 <materialDesign:PackIcon Kind="Food" Width="80" Height="80"/>
                 <TextBlock Text="Table" HorizontalAlignment="Center" Margin="5 10" FontSize="20"/>
@@ -26,7 +27,7 @@
                      materialDesign:HintAssist.FloatingScale="0.5"
                      FontWeight="Bold"
                      Text="{Binding PAD_TEXT,   Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}"
-                     Width="150" materialDesign:HintAssist.Hint="Numero" Height="60"/>
+                     Width="175" materialDesign:HintAssist.Hint="Numero" Height="60"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>

@@ -28,31 +28,31 @@ namespace ErpAlgerie.Modules.POS
         {
             settings = PosSettings.getInstance();
             if (ticket == null)
-            { 
+            {
                 throw new Exception("Selectionner un TICKET a payé");
             }
-          
 
-            this.ticket = ticket; 
+
+            this.ticket = ticket;
 
             if (this.ticket.MontantPaye > 0)
             {
-                MontantRecu = this.ticket.Reste ;
+                MontantRecu = this.ticket.Reste;
             }
             else
             {
                 MontantRecu = this.ticket.Total;
             }
-           
+
             LoadData();
 
             IsAnonym = true;
             var settingsUser = PosSettings.getInstance();
             if (client != null)
-            { 
+            {
                 SelectedClient = client;
             }
-            
+
             PrintPdf = settingsUser.EstImprimer;
             PrintKitchen = settingsUser.EstImprimerCuisine;
             CreateFacture = settingsUser.EstFacturer;
@@ -87,6 +87,7 @@ namespace ErpAlgerie.Modules.POS
 
             Facture fac = new Facture();
             fac.EstDelivrer = true;
+            fac.Position = ticket.Position;
             fac.Series = settings.SeriesFacture;
             fac.EstPaye = (MontantRetour >= 0);
             fac.Client = SelectedClient?.Id;
@@ -95,12 +96,12 @@ namespace ErpAlgerie.Modules.POS
             fac.DateEcheance = DateTime.Now;
             fac.Remarques = $"{ticket.ticketType.ToString()} {ticket.Numero}";
             fac.VenteComptoir = true;
-            fac.UpdateStock = true;   
-           var repas = ticket.CarteLines ;
+            fac.UpdateStock = true;
+            var repas = ticket.CarteLines;
 
 
 
-           
+
 
 
             foreach (var item in repas)
@@ -108,18 +109,18 @@ namespace ErpAlgerie.Modules.POS
 
                 LigneFacture line = item.article.Map("LigneFacture") as LigneFacture;
                 line.PrixUnitaire = item.PricUnitaire;
-                line.Qts = item.Qts; 
+                line.Qts = item.Qts;
                 fac.ArticleFacture.Add(line);
             }
-            if(DeleteTicket && ticket.Reste > 0)
+            if (DeleteTicket && ticket.Reste > 0)
             {
                 var response = MessageBox.Show("etes vous sur de vouloir supprimer le ticket partiellement payée?", "SUPPRIMER TICKET?", MessageBoxButton.YesNo);
                 if (response == MessageBoxResult.No)
                     return;
             }
-           if(CreateFacture && ticket.Reste > 0)
+            if (CreateFacture && ticket.Reste > 0)
             {
-                
+
                 MessageBox.Show("Vous pouvez pas facturer une commande partiellement payée. Décocher <FACTURER>");
                 return;
             }
@@ -129,18 +130,18 @@ namespace ErpAlgerie.Modules.POS
                 {
                     //214 214
 
-                  
+
                     fac.RemiseGlobal = ticket.Remise;
                     ticket.RefFacture = fac.Id;
                     if (settings.SeriesFacture != null && settings.SeriesFacture != ObjectId.Empty)
                         fac.Series = settings.SeriesFacture;
-                    
+
                     fac.Save();
                     fac.Submit();
 
-                    var paiement = fac.SaisirPaiement(false);
-                    paiement.Save();
-                    paiement.Submit();
+                    //var paiement = fac.SaisirPaiement(false);
+                    //paiement.Save();
+                    //paiement.Submit();
                 }
                 catch (Exception s)
                 {
@@ -149,18 +150,12 @@ namespace ErpAlgerie.Modules.POS
             }
             if (PrintKitchen)
             {
-               
+
             }
             if (PrintPdf)
             {
 
                 var local = PosSettings.getInstance().POSPrinter;
-                //PrintDocument print = new PrintDocument();
-                //var docz= fac.ExportPDF(fac.GetType(), settings.NomTemplate, !settings.DontUseHeader);
-                //print.DocumentName = docz;
-                //print.PrinterSettings.PrinterName = local;
-                //print.DefaultPageSettings.PaperSize.Width = 297
-                //print.Print();
 
                 if (string.IsNullOrWhiteSpace(settings.NomTemplate))
                 {
@@ -190,23 +185,10 @@ namespace ErpAlgerie.Modules.POS
                 {
                     MessageBox.Show(s.Message);
                 }
-                //if (!string.IsNullOrWhiteSpace(settings.NomTemplate))
-                //{
-                //    var doc =  fac.ExportWORD(fac.GetType(), settings.NomTemplate,!settings.DontUseHeader);
-                //    ProcessStartInfo info = new ProcessStartInfo(doc);
-                //    info.Verb = "Print";
-                //    info.CreateNoWindow = true;
-                //    info.WindowStyle = ProcessWindowStyle.Hidden;
-                //    Process.Start(info);
 
-                //}
-                //else
-                //{
-                //  fac.ExportPDF(fac.GetType(), true, !settings.DontUseHeader);
-                //}
             }
-            if(OpenPdf)
-               await DataHelpers.Shell.OpenScreenDetach(fac, fac.Name);
+            if (OpenPdf)
+                await DataHelpers.Shell.OpenScreenDetach(fac, fac.Name);
 
             if (DeleteTicket)
             {
@@ -224,28 +206,58 @@ namespace ErpAlgerie.Modules.POS
             this.RequestClose(false);
         }
 
-       
+
         private decimal _MontantTotal;
-        public bool DeleteTicket { get; set; } = true;
 
-       
 
-        public bool CreateFacture { get; set; } = false;
+
+        // public bool CreateFacture { get; set; } = false;
+
+        private bool _CreateFacture = false;
+        public bool CreateFacture
+        {
+            get { return _CreateFacture; }
+            set
+            {
+                _CreateFacture = value;
+                _DeleteTicket = value;
+                NotifyOfPropertyChange("CreateFacture");
+                NotifyOfPropertyChange("DeleteTicket");
+            }
+        }
+
+        private bool _DeleteTicket = true;
+        public bool DeleteTicket
+        {
+            get { return _DeleteTicket; }
+            set
+            {
+                _CreateFacture = value;
+                _DeleteTicket = value;
+                NotifyOfPropertyChange("CreateFacture");
+                NotifyOfPropertyChange("DeleteTicket");
+            }
+        }
+
+
+
         public bool PrintPdf { get; set; } = false;
 
         public bool PrintKitchen { get; set; } = false;
         public bool OpenPdf { get; set; } = false;
         public decimal MontantRecu { get; set; }
 
-        public decimal MontantRetour { get
+        public decimal MontantRetour
+        {
+            get
             {
                 return MontantRecu - ticket.Reste;
             }
         }
-        
 
-        public  void SetTotalAuto()
-        { 
+
+        public void SetTotalAuto()
+        {
             NotifyOfPropertyChange("MontantRecu");
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantTotal");
@@ -284,38 +296,24 @@ namespace ErpAlgerie.Modules.POS
 
         public void updateValues()
         {
-            if (TAP_EDIT_DEST == "MONTANT_TOTAL")
+            if (REMISE_BORDER == 2)
             {
-                //decimal montant = 0;
-                //decimal.TryParse(PAD_TEXT, out montant);
-                //MontantTotal = montant;
-                NotifyOfPropertyChange("MontantTotal");
+                decimal montant = 0;
+                decimal.TryParse(PAD_TEXT, out montant);
+                ticket.Remise = montant;
             }
 
-            if (TAP_EDIT_DEST == "MONTANT_RECU")
+            if (RECU_BORDER == 2)
             {
                 decimal montant = 0;
                 decimal.TryParse(PAD_TEXT, out montant);
                 MontantRecu = montant;
-                NotifyOfPropertyChange("MontantRecu");
-                NotifyOfPropertyChange("MontantReste");
-                NotifyOfPropertyChange("ticket");
-
 
             }
-
-            if (TAP_EDIT_DEST == "MONTANT_REMISE")
-            {
-                decimal montant = 0;
-                decimal.TryParse(PAD_TEXT, out montant);
-                this.ticket.Remise = montant;
-                NotifyOfPropertyChange("MontantRemise");
-
-                NotifyOfPropertyChange("ticket");
-            }
-            NotifyOfPropertyChange("MontantTotalaPaye");
-            NotifyOfPropertyChange("MontantRetour");
-            NotifyOfPropertyChange("MontantReste");
+            Billet = 0;
+            NotifyOfPropertyChange("ticket");
+            NotifyOfPropertyChange("MontantRecu");
+            NotifyOfPropertyChange("MontantTotal");
         }
 
         public string TAP_EDIT_DEST { get; set; }
@@ -328,28 +326,40 @@ namespace ErpAlgerie.Modules.POS
         }
         public void SelectAllMontantRecu(object s, EventArgs e)
         {
+            REMISE_BORDER = 0;
+            RECU_BORDER = 2;
             Keyboard.ClearFocus();
             PAD_TEXT = "";
             TAP_EDIT_DEST = "MONTANT_RECU";
             NotifyOfPropertyChange("PAD_TEXT");
+            NotifyOfPropertyChange("REMISE_BORDER");
+            NotifyOfPropertyChange("RECU_BORDER");
+
         }
+
         public void SelectAllMontantRemise(object s, EventArgs e)
         {
-            Keyboard.ClearFocus();
+            // Keyboard.ClearFocus();
+
+            REMISE_BORDER = 2;
+            RECU_BORDER = 0;
+
             PAD_TEXT = "";
             TAP_EDIT_DEST = "MONTANT_REMISE";
             NotifyOfPropertyChange("PAD_TEXT");
+            NotifyOfPropertyChange("REMISE_BORDER");
+            NotifyOfPropertyChange("RECU_BORDER");
         }
-        
+
 
         public void PAD_DELETE()
         {
             if (PAD_TEXT?.Length > 0)
             {
-                PAD_TEXT = PAD_TEXT.Remove(PAD_TEXT.Length - 1);                
+                PAD_TEXT = PAD_TEXT.Remove(PAD_TEXT.Length - 1);
             }
             else
-            { 
+            {
                 NotifyOfPropertyChange("OkStatus");
             }
             Billet = 0;
@@ -362,44 +372,81 @@ namespace ErpAlgerie.Modules.POS
         public decimal Billet { get; set; } = 0;
         public void da100()
         {
-            MontantRecu = Billet += 100;
+
+            if (REMISE_BORDER == 2)
+            {
+                ticket.Remise += 100;
+            }
+            else
+            {
+                MontantRecu = Billet += 100;
+            }
+
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantRecu");
             NotifyOfPropertyChange("MontantTotalaPaye");
-            NotifyOfPropertyChange("MontantReste");
+            NotifyOfPropertyChange("ticket");
 
         }
         public void da200()
         {
-            MontantRecu = Billet += 200;
+            if (REMISE_BORDER == 2)
+            {
+                ticket.Remise += 200;
+            }
+            else
+            {
+                MontantRecu = Billet += 200;
+            }
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantRecu");
             NotifyOfPropertyChange("MontantReste");
-            NotifyOfPropertyChange("MontantTotalaPaye");
+            NotifyOfPropertyChange("ticket");
 
         }
         public void da500()
         {
-            MontantRecu = Billet += 500;
+            if (REMISE_BORDER == 2)
+            {
+                ticket.Remise += 500;
+            }
+            else
+            {
+                MontantRecu = Billet += 500;
+            }
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantRecu");
-            NotifyOfPropertyChange("MontantTotalaPaye");
+            NotifyOfPropertyChange("ticket");
         }
         public void da1000()
         {
-            MontantRecu = Billet += 1000;
+            if (REMISE_BORDER == 2)
+            {
+                ticket.Remise += 1000;
+            }
+            else
+            {
+                MontantRecu = Billet += 1000;
+            }
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantRecu");
             NotifyOfPropertyChange("MontantReste");
-            NotifyOfPropertyChange("MontantTotalaPaye");
+            NotifyOfPropertyChange("ticket");
 
         }
         public void da2000()
         {
-            MontantRecu = Billet += 2000;
+            if (REMISE_BORDER == 2)
+            {
+                ticket.Remise += 2000;
+            }
+            else
+            {
+                MontantRecu = Billet += 2000;
+            }
             NotifyOfPropertyChange("MontantRetour");
             NotifyOfPropertyChange("MontantRecu");
-            NotifyOfPropertyChange("MontantTotalaPaye");
+            NotifyOfPropertyChange("ticket");
             NotifyOfPropertyChange("MontantReste");
         }
 
@@ -423,6 +470,12 @@ namespace ErpAlgerie.Modules.POS
             }
         }
 
+        public int REMISE_BORDER { get; set; }
+        public int RECU_BORDER { get; set; } = 2;
 
+        public void CloseTicket()
+        {
+            this.RequestClose(false);
+        }
     }
 }

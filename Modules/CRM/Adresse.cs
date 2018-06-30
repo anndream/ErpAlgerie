@@ -12,11 +12,19 @@ namespace ErpAlgerie.Modules.CRM
     class Adresse : ModelBase<Adresse>
     {
 
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
-
- 
+        #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "CRM";
+        public override string CollectionName { get; } = "Adresses";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "MapMarker";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "AdresseName";
+
+        #endregion
+          
         public override void Validate()
         {
             base.Validate();
@@ -24,23 +32,13 @@ namespace ErpAlgerie.Modules.CRM
 
         }
 
-        [DisplayName("Adresse")]
-        public override string Name
-        {
-            get
-            {
-                return AdresseName;
-            }
-            set => base.Name = value;
-        }
-
+       
 
 
         public Adresse()
         {
 
-        }
-        public override string CollectionName { get; } = "Adresses";
+        } 
 
         
         [ColumnAttribute(ModelFieldType.Text, "")]

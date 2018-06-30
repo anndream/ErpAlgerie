@@ -17,8 +17,20 @@ namespace ErpAlgerie.Modules.CRM
     public class ModuleErp : ModelBase<ModuleErp>
     {
 
+        #region SETTINGS
+
         public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Modules";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "Gears";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Libelle";
+
+        #endregion
+
+          
 
         public override void Validate()
         {
@@ -27,10 +39,7 @@ namespace ErpAlgerie.Modules.CRM
         }
         public ModuleErp()
         {
-        }
-        public override string CollectionName { get; } = "Modules";
-        public override string ModuleName { get; set; } = "Configuration";
-        public override string Name { get { return Libelle; } set => base.Name = value; }
+        }  
 
         [ColumnAttribute(ModelFieldType.ReadOnly, "")]
         [IsBoldAttribute(true)]
@@ -54,6 +63,12 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Une instance")]
         public bool IsInstanceModule { get; set; }
 
+
+
+        [Column(ModelFieldType.Check, "Peut valider?")]
+        [DisplayName("Validable")]
+        public bool ModuleSubmitable { get; set; }
+        
 
         [ColumnAttribute(ModelFieldType.ReadOnly, "")]
         [DisplayName("Instance function")]

@@ -18,7 +18,7 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = true;
-        public override string ModuleName { get; set; } = "COMPTE";
+        public override string ModuleName { get; set; } = "COMPTES";
         public override string CollectionName { get; } = "Écriture de paiement";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string IconName { get; set; } = "CurrencyUsd";
@@ -201,7 +201,7 @@ namespace ErpAlgerie.Modules.CRM
             {
                 foreach (var item in ecriturejournal)
                 {
-                    if (!item.Delete())
+                    if (!item.Delete(false))
                         continue;
                 }
             }
@@ -217,7 +217,7 @@ namespace ErpAlgerie.Modules.CRM
             {
                 foreach (var item in ecriturejournal)
                 {
-                    if (!item.Delete())
+                    if (!item.Delete(false))
                         continue;
                 }
             }

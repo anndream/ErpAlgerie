@@ -42,6 +42,7 @@ namespace ErpAlgerie.Modules.Core.Module
         [ShowInTable(true)]
         public new abstract string Name { get; set; }
 
+        [BsonIgnore]
         public abstract string CollectionName { get; }
 
 
@@ -53,6 +54,7 @@ namespace ErpAlgerie.Modules.Core.Module
         public ObjectId? CreatedBy { get; set; } = ObjectId.Empty;
 
         [BsonIgnore]
+        [DisplayName("Crée par")]
         public string CreatedByName { get
             {
                 return CreatedBy?.GetObject("User")?.Name;
@@ -79,6 +81,8 @@ namespace ErpAlgerie.Modules.Core.Module
         /// 0: Draft. 1: Submit (valide)
         /// </summary>
         public int DocStatus { get; set; }
+
+        [BsonIgnore]
         public virtual bool Submitable { get; set; } = false;
 
         [DisplayName("Crée le")]
@@ -197,6 +201,7 @@ namespace ErpAlgerie.Modules.Core.Module
         {
             OvExport.OvPdfModelExport ov = new OvExport.OvPdfModelExport(t, template, this);
             ov.UseHeader = Useheader;
+            ov.GenerateProps = false;
             return ov.GenerateOffice();
         }
 
@@ -480,9 +485,9 @@ namespace ErpAlgerie.Modules.Core.Module
                 {
                     SetSeries();
                     BeforeEdit();
-                    DS.db.UpdateOne<T>(this as T);
+                    var res = DS.db.UpdateOne<T>(this as T);
                     AfterEdit();
-                    return true;
+                    return res;
                 }
                 MessageBox.Show("Vous n'avez pas l'autorisation pour modifier!", "Action non autorisée");
                 return false;
@@ -512,9 +517,9 @@ namespace ErpAlgerie.Modules.Core.Module
             {
               //  BeforeEdit();
                 this.DocStatus = 0;
-                DS.db.UpdateOne<T>(this as T);
+                var res =DS.db.UpdateOne<T>(this as T);
                 AfterEdit();
-                return true;
+                return res;
             }
             else
             {
@@ -529,9 +534,9 @@ namespace ErpAlgerie.Modules.Core.Module
             {
                 BeforeEdit();
                 this.DocStatus = 1;
-                DS.db.UpdateOne<T>(this as T);
+               var res=  DS.db.UpdateOne<T>(this as T);
                 AfterEdit();
-                return true;
+                return res;
             }
             MessageBox.Show("Vous n'avez pas l'autorisation pour valider!", "Action non autorisée");
             return false;

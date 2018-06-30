@@ -35,6 +35,10 @@ namespace ErpAlgerie.Pages.Template
         
 
         public FixedDocumentSequence Document { get; set; }
-         
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            datagrid.SelectAll();
+        }
     }
 }

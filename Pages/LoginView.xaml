@@ -9,12 +9,13 @@
         xmlns:local="clr-namespace:ErpAlgerie.Pages"
         xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ErpAlgerie.Pages.LoginView"
         mc:Ignorable="d"
-        Title="Connexion" Height="319.737" Width="300">
+        Title="Connexion" Height="339.737" Width="300">
     <StackPanel>
         <StackPanel Margin="20">
+            <Image Source="/ErpAlgerie;component/Images/logo_restaurant.png" Margin="0 10"/>
             <TextBlock Text="Utilisateur"/>
             <ComboBox Style="{StaticResource MaterialDesignFloatingHintComboBoxWhite}"
-                      materialDesign:HintAssist.Hint="Utilisateurs"
+                      materialDesign:HintAssist.Hint="Utilisateurs" BorderThickness="0 0 0 1"
                       ItemsSource="{Binding users, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding user, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" DisplayMemberPath="Name"/>
             <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBoxWhite}"
                      Foreground="White" 
@@ -23,7 +24,7 @@
             <Button BorderThickness="1 0 0 1"  
                     
                     Margin="0 30 0 10"        
-                    Command="{s:Action Connecter}"
+                    Command="{s:Action Connecter}" 
                     Custom:ControlsHelper.ContentCharacterCasing="Normal" 
                     Content="Connecter"/>
             <Button Command="{s:Action Close}" Background="White"

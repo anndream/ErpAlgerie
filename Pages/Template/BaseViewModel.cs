@@ -4,6 +4,7 @@ using ErpAlgerie.Modules.Core.Module;
 using ErpAlgerie.Modules.CRM;
 using ErpAlgerie.Pages.Events;
 using ErpAlgerie.Pages.Helpers;
+using ErpAlgerie.Pages.MassEdit;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
@@ -117,6 +118,7 @@ namespace ErpAlgerie.Pages.Template
                 Button newOps = new Button();
                 newOps.Content = attribDisplay.DisplayName;
                 newOps.Click += NewOps_Click;
+                newOps.TouchDown += NewOps_Click;
                 newOps.Style = App.Current.FindResource("SideToolButton") as Style;
                 newOps.Tag = attrib.Options;  // <= the name of the function
                 opeartionButtons.Children.Add(newOps);
@@ -375,6 +377,25 @@ namespace ErpAlgerie.Pages.Template
             }
         }
 
+        public void MassEdit()
+        {
+
+           
+            if(SearchResul != null && SearchResul.Any())
+            {
+                var editMass = new MassEditViewModel(type,(IEnumerable<object>) SearchResul );
+                //var view = DataHelpers.container.Get<ViewManager>();
+                //var bind = view.CreateAndBindViewForModelIfNecessary(editMass);
+                DataHelpers.windowManager.ShowWindow(editMass);             }
+            else
+            {
+                MessageBox.Show("Filter les résultats d'abord");
+                return;
+            }
+
+
+        }
+
         public void ImportData()
         {
             try
@@ -399,12 +420,20 @@ namespace ErpAlgerie.Pages.Template
                             foreach (var item in data)
                             {
                                 item.AddedAtUtc = DateTime.Now;
-                                item.isLocal = false;
+                           //     item.isLocal = false;
+                                try
+                                {
+                                   // item.Series = item.MyModule()?.Id;
+                                }
+                                catch
+                                {}
+                                item.Save();
+                                item.Submit();
                                 // item.Save();
                             }
-                            var mi = typeof(BaseMongoRepository).GetMethod("AddMany");
-                            var gen = mi.MakeGenericMethod(type);
-                            gen.Invoke(DS.db, new object[] { data });
+                            //var mi = typeof(BaseMongoRepository).GetMethod("AddMany");
+                            //var gen = mi.MakeGenericMethod(type);
+                            //gen.Invoke(DS.db, new object[] { data });
                             //  DS.db.AddMany<t>(data);
                             MessageBox.Show("Terminé");
                             Actualiser();
@@ -428,10 +457,21 @@ namespace ErpAlgerie.Pages.Template
             }
         }
 
-        public void ExporterPDF()
+        public async void ExporterPDF()
         {
-            windowManager.ShowWindow(new PrintWindowViewModel(Items));
-
+            if (SearchResul?.Any() == true)
+            {
+                windowManager.ShowWindow(new PrintWindowViewModel(SearchResul));
+            }
+            else
+            {
+                var response = MessageBox.Show("Voulez-vous exporter tous les documents?", "Confirmation", MessageBoxButton.YesNo);
+                if(response == MessageBoxResult.Yes)
+                {
+                    SearchResul = await datahelper.GetData<T>(a => true);
+                    windowManager.ShowWindow(new PrintWindowViewModel(SearchResul));
+                }
+            }
         }
 
         public async void ValidateAll()
@@ -567,10 +607,12 @@ namespace ErpAlgerie.Pages.Template
             var menuOpen = new MenuItem();
             menuOpen.Header = "Ouvrir";
             menuOpen.Click += MenuOpen_Click;
+            menuOpen.TouchDown += MenuOpen_Click;
 
             var menuDelete = new MenuItem();
             menuDelete.Header = "Supprimer";
             menuDelete.Click += MenuDelete_Click; ;
+            menuDelete.TouchDown += MenuDelete_Click; ;
 
 
             MenuItems.Add(menuOpen);

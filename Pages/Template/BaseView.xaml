@@ -15,7 +15,7 @@
              xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" x:Class="ErpAlgerie.Pages.Template.BaseView"
-              xml:lang="fr-DZ"
+              xml:lang="ar-DZ"
              mc:Ignorable="d" KeyDown="{s:Action UserControl_KeyDown}"
              d:DesignHeight="501" d:DesignWidth="1345.5" >
 
@@ -37,7 +37,7 @@
 
 
 
-                    <Button Command="{s:Action prevPage}"  ToolTip="Page précédente"
+                    <Button Command="{s:Action prevPage}" ToolTip="Page précédente"
                      Style="{StaticResource SideToolButton}"   >
                         <materialDesign:PackIcon Kind="ArrowLeftDropCircleOutline" Height="20" Width="20" />
                     </Button>
@@ -45,17 +45,20 @@
                            
                            HorizontalAlignment="Left" Width="34"/>
 
-                    <Button Command="{s:Action nextPage}"  ToolTip="Page suivante"
+                    <Button Command="{s:Action nextPage}" ToolTip="Page suivante"
                      Style="{StaticResource SideToolButton}"   >
                         <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline"  Height="20" Width="20" />
                     </Button>
 
 
-                    <Button Command="{s:Action SelectAll}"  ToolTip="Selectionner touts"
+                    <!--<Button Command="{s:Action SelectAll}" ToolTip="Selectionner touts"
+                     Style="{StaticResource SideToolButton}"   >
+                        <materialDesign:PackIcon Kind="CheckboxMultipleMarkedOutline"  Height="20" Width="20" />
+                    </Button>-->
+                    <Button  Click="Button_Click" ToolTip="Selectionner touts"
                      Style="{StaticResource SideToolButton}"   >
                         <materialDesign:PackIcon Kind="CheckboxMultipleMarkedOutline"  Height="20" Width="20" />
                     </Button>
-
 
                     <!--<Button Command="{s:Action Actualiser}"
                      Focusable="False" 
@@ -119,7 +122,7 @@
                                 <ColumnDefinition
               Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Button Command="{s:Action DoSearchKey}"
+                            <Button Command="{s:Action DoSearchKey}" 
             Style="{DynamicResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon
               Kind="Magnify"
@@ -155,7 +158,7 @@
                         Watermark="Chercher..." Margin="5 7" />-->
 
                     <Button ToolTip="Filtrer les résultats..." 
-                            Command="{s:Action doFiltrer}" VerticalAlignment="Center"
+                            Command="{s:Action doFiltrer}"  VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
                      Style="{StaticResource SideToolButton}"   >
                         <StackPanel Orientation="Horizontal">
@@ -179,14 +182,15 @@
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="MenuDown" Padding="0" Margin="2 0 0 0" />
                             </MenuItem.Icon>
-                            <MenuItem Header="Supprimer"  Command="{s:Action DeleteAll}"/>
+                            <MenuItem Header="Supprimer"  Command="{s:Action DeleteAll}" />
                             <MenuItem Header="Valider"  Command="{s:Action ValidateAll}"/>
                             <Separator/>
-                            <MenuItem Header="Exporter"  Command="{s:Action ExporterPDF}"/>
+                            <MenuItem Header="Exporter"  Command="{s:Action ExporterPDF}" />
                             <MenuItem Header="Importer"  Command="{s:Action ImportData}"/>
                             <MenuItem Header="Exporter template"  Command="{s:Action ExportTemplate}"/>
                             <Separator/>
-                            <MenuItem Header="Ajouter au bureau"  Command="{s:Action AjouterAuBureau}"/>
+                            <MenuItem Header="Édition en masse"  Command="{s:Action MassEdit}"  />
+                            <MenuItem Header="Ajouter au bureau"  Command="{s:Action AjouterAuBureau}"  />
                             <MenuItem Header="Modifier module"  Command="{s:Action ModifierModule}"/>
                         </MenuItem>
 
@@ -239,7 +243,7 @@
 
                     </Button>-->
 
-                    <Button Command="{s:Action Add}" ToolTip="Créer un nouveau document!"
+                    <Button Command="{s:Action Add}"   ToolTip="Créer un nouveau document!"
                     x:Name="button_Copy"  Content="Nouveau" Height="29"   Custom:ControlsHelper.ContentCharacterCasing="Normal"
                     FontWeight="Bold" FontSize="12" materialDesign:ShadowAssist.ShadowDepth="Depth0" 
                     Visibility="{Binding ShowButtonAjouter, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"   >
@@ -339,7 +343,7 @@
                        
                        Content="{Binding StatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                     />
-                <Button Command="{s:Action BigFont}" Padding="0" MinHeight="10" Height="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Button Command="{s:Action BigFont}"   Padding="0" MinHeight="10" Height="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                     <Label Content="+" Margin="0" Padding="10 0"  Foreground="Black" 
                           />
                 </Button>

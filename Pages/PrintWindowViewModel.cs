@@ -22,6 +22,57 @@ namespace ErpAlgerie.Pages
 
         public List<PropertyInfo> ChoosedPrperties { get; set; } = new List<PropertyInfo>();
 
+        public  void SelectAll()
+        {
+            foreach (var item in checkBoxes)
+            {
+                item.IsChecked = true;
+                NotifyOfPropertyChange("props");
+            }
+        }
+
+        public void ImportantSelectAll()
+        {
+
+            var unwanted = new List<string>()
+            {
+                "_etag",
+                "DocOpenMod",
+                "Submitable",
+                "CollectionName",
+                "CreatedBy",
+                "isLocal",
+                "isHandled",
+                "DocStatus",
+                "Submitable",
+                "StatusColor",
+                "CloseEvent",
+                "DefaultTemplate",
+                "IsSelectedd",
+                "ModuleName",
+                "ShowInDesktop",
+                "SubModule",
+                "DocCardOne",
+                "DocCardTow",
+                "IconName",
+                "ForceIgniorValidatUnique",
+                "Index",
+                "NameField",
+                "_NameField",
+                "IsInstance",
+                "PropertyChangedDispatcher",
+                "Version",
+
+
+            };
+
+            foreach (var item in checkBoxes.Where(a => !unwanted .Contains(a.Content)))
+            {
+                item.IsChecked = true;
+                NotifyOfPropertyChange("props");
+            }
+        }
+        public List<CheckBox> checkBoxes { get; set; } = new List<CheckBox>();
         public PrintWindowViewModel(IEnumerable<dynamic> items)
         {
             Items = items;
@@ -31,19 +82,34 @@ namespace ErpAlgerie.Pages
 
             if(one != null)
             {
+                checkBoxes = new List<CheckBox>();
                 var pr = one.GetType().GetProperties();
                 foreach (PropertyInfo item in pr)
                 {
                     var name = item.Name;
                     var dispaly = item.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+                    var column = item.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+
+                    if (column != null && (column.FieldType == ModelFieldType.Separation
+                        || column.FieldType == ModelFieldType.BaseButton
+                        || column.FieldType == ModelFieldType.Button
+                        || column.FieldType == ModelFieldType.LienButton
+                        || column.FieldType == ModelFieldType.OpsButton
+                        || column.FieldType == ModelFieldType.Table
+                        || column.FieldType == ModelFieldType.WeakTable 
+                        ))
+                        continue;
+
                     if (dispaly != null)
                         name = dispaly.DisplayName;
 
                     CheckBox check = new CheckBox();
                     check.Tag = item;
                     check.Content = name;
+                    check.Margin = new Thickness(5);
                     check.Checked += Check_Checked;
                     check.Unchecked += Check_Unchecked;
+                    checkBoxes.Add(check);
                     props.Children.Add(check);
                 }
 

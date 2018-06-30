@@ -6,17 +6,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErpAlgerie.Pages"
         mc:Ignorable="d"
-        Title="Exporter excel" Height="auto" Width="auto" VerticalAlignment="Stretch" Icon="/ErpAlgerie;component/Images/Ok.png">
-    <StackPanel Margin="10">
+        Title="Exporter excel" Height="auto" Width="600" VerticalAlignment="Stretch" Icon="/ErpAlgerie;component/bridge_1DY_icon.ico">
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <Button Content="Touts" Command="{s:Action SelectAll}" Margin="5 10"/>
 
-        <ContentControl Content="{Binding props, Mode=OneWay,     UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-        <Label Content="{Binding StatusText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" 
+            <Button Content="Importants seulement" Command="{s:Action ImportantSelectAll}" Margin="5 0 5 20"/>
+            <ContentControl Content="{Binding props, Mode=OneWay,     UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            <Label Content="{Binding StatusText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" 
                  Text="{Binding Titre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button Content="Ok" Command="{s:Action Ok}" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="75" Background="#FF27A8F7" BorderBrush="#FF27A8F7" Foreground="White"/>
-            <Button Content="Annuler" Command="{s:Action Annuler}" HorizontalAlignment="Left" Margin="5 " VerticalAlignment="Top" Width="75"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Content="Ok" Command="{s:Action Ok}" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="auto" Background="#FF27A8F7" BorderBrush="#FF27A8F7" Foreground="White"/>
+                <Button Content="Annuler" BorderBrush="Black" Command="{s:Action Annuler}" HorizontalAlignment="Left"
+                     Background="White" Foreground="Black"  Margin="5 " VerticalAlignment="Top" Width="auto"/>
 
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Window>

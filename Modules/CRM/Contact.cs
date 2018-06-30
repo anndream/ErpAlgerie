@@ -13,11 +13,23 @@ namespace ErpAlgerie.Modules.CRM
 {
     class Contact : ModelBase<Contact>
     {
-      
 
 
+        #region SETTINGS
 
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "CRM";
+        public override string CollectionName { get; } = "Contacts";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        public override string IconName { get; set; } = "Gears";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Designiation";
+
+        #endregion
+
+
+         
 
         public override void Validate()
         {
@@ -29,20 +41,12 @@ namespace ErpAlgerie.Modules.CRM
                 throw new Exception("Designiation est obligatoire");
 
         }
-        public override string Name
-        {
-            get
-            {
-                return Designiation;
-            }
-            set => base.Name = value;
-        }
+      
 
         public Contact()
         {
 
-        }
-        public override string CollectionName { get; } = "Contacts";
+        } 
 
         [ColumnAttribute(ModelFieldType.Text, "")]
         [IsBoldAttribute(true)]

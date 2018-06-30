@@ -19,14 +19,14 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
-        public override string ModuleName { get; set; } = "Configuration";
+        public override string ModuleName { get; set; } = "PDV";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string CollectionName { get; } = "Paramétres POS";
         public override string IconName { get; set; } = "Settings";
         public override bool ShowInDesktop { get; set; } = true;
-
+        public override string NameField { get; set; } = "Titre";
         #endregion
-         
+
         public override bool IsInstance { get; set; } = true;
 
         public PosSettings()
@@ -35,15 +35,16 @@ namespace ErpAlgerie.Modules.CRM
             {
                 Printers.Add(printer);
             }
-        } 
-        public override string Name
-        {
-            get
-            {
-                return "Paramétres POS";
-            }
-            set => base.Name = value;
         }
+        //public override string Name
+        //{
+        //    get
+        //    {
+        //        return "Paramétres POS";
+        //    }
+        //    set => base.Name = value;
+        //}
+        public string Titre { get; set; } = "Paramétres POS";
 
         public static PosSettings getInstance()
         {
@@ -60,7 +61,7 @@ namespace ErpAlgerie.Modules.CRM
         }
 
         [ColumnAttribute(ModelFieldType.Text, "")]
-        [DisplayName("Champ identifiant article")]
+        [DisplayName("Identifiant d'article")]
         public string NameProperty { get; set; } = "Designiation";
 
         [DisplayName("Client anonyme par default")]
@@ -75,8 +76,7 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Générer la facture toujours!")]
         [ColumnAttribute(ModelFieldType.Check, "Facturer")]
         public bool EstFacturer { get; set; }
-
-
+         
 
         [DisplayName("Utilisateur peut modifier les prix?")]
         [ColumnAttribute(ModelFieldType.Check, "Changer Prix de vente")]
@@ -89,6 +89,16 @@ namespace ErpAlgerie.Modules.CRM
         public ObjectId? SeriesFacture { get; set; }
 
 
+        [DisplayName("Vente")]
+        [Column(ModelFieldType.Separation, "")]
+        public string sepVente { get; set; }
+
+
+        [Column(ModelFieldType.Lien,"ListePrix")]
+        [DisplayName("Liste des prix par default")]
+        public ObjectId? ListPrixParDefault { get; set; } = ObjectId.Empty;
+
+
         [DisplayName("Impression")]
         [Column(ModelFieldType.Separation, "")]
         public string sepPrinting { get; set; }
@@ -98,16 +108,22 @@ namespace ErpAlgerie.Modules.CRM
         public bool DontUseHeader { get; set; } = true;
 
 
+        [DisplayName("Cacher image repas!")]
+        [ColumnAttribute(ModelFieldType.Check, "_")]
+        public bool HideImageRepas { get; set; } = true;
+
+
+
         [DisplayName("Ticket cuisine obligatoire")]
         [ColumnAttribute(ModelFieldType.Check, "TICKET CUISINE")]
         public bool PrintCuisineAlways { get; set; } = true;
 
-        [DisplayName("Imprimer le ticket")]
-        [ColumnAttribute(ModelFieldType.Check, "Imprimer")]
+        [DisplayName("Imprimer le ticket de vente ?")]
+        [ColumnAttribute(ModelFieldType.Check, "Imprimer le ticket")]
         public bool EstImprimer { get; set; }
 
-        [DisplayName("Imprimer cuisine")]
-        [ColumnAttribute(ModelFieldType.Check, "Imprimer")]
+        [DisplayName("Imprimer commande cuisine ?")]
+        [ColumnAttribute(ModelFieldType.Check, "Imprimer cuisine")]
         public bool EstImprimerCuisine { get;  set; }
 
 
@@ -133,5 +149,16 @@ namespace ErpAlgerie.Modules.CRM
 
         [BsonIgnore]
         public List<string> Printers { get; set; } = new List<string>();
+
+
+        #region SAVE
+
+        public override bool Save()
+        {
+            var result = base.Save();
+            DataHelpers.PosSettings = getInstance();
+            return result;
+        }
+        #endregion
     }
 }

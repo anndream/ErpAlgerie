@@ -13,9 +13,20 @@ namespace ErpAlgerie.Modules.CRM
 {
     class DbSourceLink : ModelBase<DbSourceLink>
     {
+        #region SETTINGS
 
-        public override string ModuleName { get; set; } = "Configuration";
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Sources DB";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "Plus";
+        public override bool ShowInDesktop { get; set; } = true;
+
+        public override string NameField { get; set; } = "DbName";
+         
+
+        #endregion
+         
 
         public override void Validate()
         {
@@ -23,20 +34,12 @@ namespace ErpAlgerie.Modules.CRM
             base.ValidateUnique();
         }
 
-        public override string Name
-        {
-            get
-            {
-                return DbName;
-            }
-            set => base.Name = value;
-        }
+       
 
         public DbSourceLink()
         {
 
-        }
-        public override string CollectionName { get; } = "Sources DB";
+        } 
 
         [IsBoldAttribute(false)]
         [ColumnAttribute(ModelFieldType.Text, "")]

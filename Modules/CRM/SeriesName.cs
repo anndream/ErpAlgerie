@@ -22,18 +22,20 @@ namespace ErpAlgerie.Modules.CRM
    public class SeriesName : ModelBase<SeriesName>
     {
 
-        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
-
-
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Stock";
-        [BsonIgnore]
-        public override string SubModule { get; set; } = "Articles et prix";
-        [BsonIgnore]
-        public override string IconName { get; set; } = "Gears";
-
+        #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Nom de séries";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "Altimeter";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Libelle";
+
+        #endregion
+         
+          
         public override void Validate()
         {
             base.Validate();
@@ -41,22 +43,13 @@ namespace ErpAlgerie.Modules.CRM
 
         }
 
-        public override string Name
-        {
-            get
-            {
-                return Libelle;
-            }
-            set => base.Name = value;
-        }
-
+         
 
 
         public SeriesName()
         {
 
-        }
-        public override string CollectionName { get; } = "SeriesName";
+        } 
         
 
         [IsBoldAttribute(true)]

@@ -7,13 +7,13 @@ using System.Windows;
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("ElvaDesk")]
+[assembly: AssemblyTitle("ERPA")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ovresko")]
-[assembly: AssemblyProduct("ElvaDesk")]
+[assembly: AssemblyProduct("ERPA")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Ovresko")]
 [assembly: AssemblyCulture("")]
 
 // L'affectation de la valeur false à ComVisible rend les types invisibles dans cet assembly
@@ -24,8 +24,8 @@ using System.Windows;
 //Pour commencer à générer des applications localisables, définissez
 //<UICulture>CultureUtiliséePourCoder</UICulture> dans votre fichier .csproj
 //dans <PropertyGroup>.  Par exemple, si vous utilisez le français
-//dans vos fichiers sources, définissez <UICulture> à fr-FR. Puis, supprimez les marques de commentaire de
-//l'attribut NeutralResourceLanguage ci-dessous. Mettez à jour "fr-FR" dans
+//dans vos fichiers sources, définissez <UICulture> à ar-DZ. Puis, supprimez les marques de commentaire de
+//l'attribut NeutralResourceLanguage ci-dessous. Mettez à jour "ar-DZ" dans
 //la ligne ci-après pour qu'elle corresponde au paramètre UICulture du fichier projet.
 
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
@@ -53,5 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.1")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NeutralResourcesLanguage("fr-DZ")]
+[assembly: NeutralResourcesLanguage("")]
 

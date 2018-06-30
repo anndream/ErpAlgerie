@@ -151,7 +151,7 @@ namespace ErpAlgerie.Modules.Core.Data
         public static IEnumerable<ModuleErp> Modules { get; set; } = new List<ModuleErp>();
 
         public static L Logger { get; internal set; }
-        
+        internal static PosSettings PosSettings { get; set; }
 
         public static DataHelpers instanc()
         {
@@ -315,6 +315,7 @@ namespace ErpAlgerie.Modules.Core.Data
 
         internal static StyletIoC.IContainer container;
         internal static Process mongod;
+        public static Process restheart;
 
         internal static List<string> GetSelectData(string option)
         {

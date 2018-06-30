@@ -16,9 +16,10 @@ namespace ErpAlgerie.Modules.REPORTS
         public RapportSessionPosJournalier(SessionPos sessionPos)
         {
             this.sessionPos = sessionPos;
+            this.ReportName =  $"Rapport journalier {sessionPos.DateSession.ToShortDateString()}" ;
         }
 
-        public override string ReportName { get; set; } = "Rapport journalier";
+        public override string ReportName { get; set; }
 
         public override string[] GetHeaders()
         {

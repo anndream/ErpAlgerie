@@ -4,6 +4,7 @@ using ErpAlgerie.Modules.Core.Module;
 using ErpAlgerie.Modules.CRM;
 using ErpAlgerie.Modules.POS;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using Stylet;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
-        public override string ModuleName { get; set; } = "VENTE";
+        public override string ModuleName { get; set; } = "PDV";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string CollectionName { get; } = "Ticket de vente";
         public override string IconName { get; set; } = "TagOutline";
@@ -42,7 +43,7 @@ namespace ErpAlgerie.Modules.CRM
 
         }
 
-        public PosTicket(Client client, DateTime date, int numero, ObservableCollection<CartLine> carteLines)
+        public PosTicket(Client client, DateTime date, int numero, List<CartLine> carteLines)
         {
             Client = client;
             Date = date;
@@ -50,8 +51,29 @@ namespace ErpAlgerie.Modules.CRM
             CarteLines = carteLines;
           }
 
+        [ShowInTable]
+        [Column(ModelFieldType.ReadOnly, "{0} DA")]
+        [DisplayName("Total à payé")]
+        public decimal Total
+        {
+            get
+            {
+                return CarteLines.Where(z => z != null).Sum(a => a.Total) - Remise;
+            }
+        }
 
-        
+        [Column(ModelFieldType.ReadOnly, "{0} DA")]
+        [DisplayName("Total")]
+        public decimal TotalNet
+        {
+            get
+            {
+                return CarteLines.Where(z => z != null).Sum(a => a.Total);
+            }
+        }
+
+        public int Position { get; set; }
+
         public Client Client { get; set; }
         [ShowInTable]
         [Column(ModelFieldType.ReadOnly,"")]
@@ -77,25 +99,13 @@ namespace ErpAlgerie.Modules.CRM
         [DisplayName("Remise")]
         public decimal Remise { get; set; }
 
-        [Column(ModelFieldType.ReadOnly, "{0:C}")]
-        [DisplayName("Rest à payé")]
+        [Column(ModelFieldType.ReadOnly, "{0} DA")]
+        [DisplayName("Reste à payé")]
         public decimal Reste     { get
             {
                 if (MontantPaye > Total)
-                    MontantPaye = Total;
+                    return 0;
                 return Total - MontantPaye;
-            }
-        }
-
-
-        [ShowInTable]
-        [Column(ModelFieldType.ReadOnly, "{0:C}")]
-        [DisplayName("Total")]
-        public decimal Total
-        {
-            get
-            {
-                return CarteLines.Sum(a => a.Total) - Remise;
             }
         }
 
@@ -113,9 +123,16 @@ namespace ErpAlgerie.Modules.CRM
         }
 
 
-         public ObservableCollection<CartLine> CarteLines { get; set; } = new ObservableCollection<CartLine>();
- 
+        [ColumnAttribute(ModelFieldType.Table, "CartLine")]
+        [ShowInTable(false)]
+        [DisplayName("Variante")]
+        [myTypeAttribute(typeof(Article))]
+        public List<CartLine> CarteLines { get; set; } = new List<CartLine>();
 
+        [DisplayName("Résultats")]
+        [BsonIgnore]
+        [Column(ModelFieldType.Separation,"")]
+        public string sepTable { get; set; }
 
         public TicketType ticketType { get; set; }
 
@@ -148,19 +165,29 @@ namespace ErpAlgerie.Modules.CRM
 
         // PRINT CUISINE
 
-        [Column(ModelFieldType.Check, "Envoyé au cuisine")]
-        [DisplayName("")]
+        [Column(ModelFieldType.Check, "")]
+        [DisplayName("Envoyé au cuisine")]
         public bool EstEnvoyerCuisine { get; set; } = false;
 
 
-        [Column(ModelFieldType.Check, "Est délivré")]
-        [DisplayName("")]
+        [Column(ModelFieldType.Check, "")]
+        [DisplayName("Est délivré")]
         public bool EstDeLivrer { get; set; }
 
 
-        [Column(ModelFieldType.Check, "Est payé")]
-        [DisplayName("")]
+        [DisplayName("A partir du terminal mobile")]
+        [Column(ModelFieldType.Check, "Mobile")]
+        public bool FromTablet { get; set; }
+
+
+        [Column(ModelFieldType.Check, "")]
+        [DisplayName("Est payé")]
         public bool EstPaye { get; set; }
+
+
+        [Column(ModelFieldType.Lien,"ListePrix")]
+        [DisplayName("Liste des prix")]
+        public ObjectId? ListePrix { get; set; } = ObjectId.Empty;
 
         public bool EnvoyerCuisineDeja { get; set; }
 
@@ -169,55 +196,66 @@ namespace ErpAlgerie.Modules.CRM
             var settings = PosSettings.getInstance();
             var imprimanteCuisine = settings.POSCuisine;
 
-            Facture fac = new Facture();
-            fac.EstDelivrer = true;
-
-            fac.Client =this.Client?.Id;
-            fac.NomClient =  this.Client?.NomComplet;
-            fac.DateCreation = DateTime.Now;
+            var positions = CarteLines.GroupBy(a => a.aCuisinePosition);
             var edited = EnvoyerCuisineDeja ? "**MODIFIÉ**" : "";
-            fac.Remarques = $"{this.ticketType.ToString()} {this.Numero} {edited}";
-            var repas = this.CarteLines;
-            foreach (var item in repas)
+            foreach (var position in positions)
             {
-
-                LigneFacture line = item.article.Map("LigneFacture") as LigneFacture;
-                line.PrixUnitaire = item.PricUnitaire;
-                line.Qts = item.Qts;
-                line.Details = item.variante?.Name + " "+item.Message;
-                fac.ArticleFacture.Add(line);
-            }
-
-            if (string.IsNullOrWhiteSpace(settings.NomTemplateCuisine))
-            {
-                MessageBox.Show("Définis le modéle d'impression dans paramétres");
-                return;
-            }
-            var doc = fac.ExportWORD(fac.GetType(), settings.NomTemplateCuisine, !settings.DontUseHeader);
-            try
-            {
-                ProcessStartInfo info = new ProcessStartInfo(doc);
-
-                foreach (String verb in info.Verbs)
+                Facture fac = new Facture();
+                fac.EstDelivrer = true;
+                fac.Position = this.Position;
+                fac.Client = this.Client?.Id;
+                fac.NomClient = this.Client?.NomComplet;
+                fac.DateCreation = DateTime.Now;
+               
+                fac.Remarques = $"{this.ticketType.ToString()} {this.Numero} {position.Key?.GetObject("CuisinePosition")?.Name} {edited} ";
+                var repas = this.CarteLines.Where(a => a.aCuisinePosition == position.Key);
+                foreach (var item in repas)
                 {
-                    System.Diagnostics.Debug.WriteLine(verb);
+                    var deffirence = item.Qts - item.OldQts;
+                    if (deffirence > 0 && item.OldQts > 0)
+                    {
+                        item.Message += $" QTS +{deffirence}";
+                    }
+                    if (deffirence < 0 && item.OldQts > 0)
+                    {
+                        item.Message += $" QTS {deffirence}";
+                    }
+
+                    LigneFacture line = item.article.Map("LigneFacture") as LigneFacture;
+                    line.PrixUnitaire = item.PricUnitaire;
+                    line.Qts = item.Qts;
+                    line.Details = item.variante?.Name + " " + item.Message;
+                    fac.ArticleFacture.Add(line);
+
+                    if (item.Message?.Contains('L') == false)                        
+                        item.Message += new string('L', 1);
+
+                    item.OldQts = item.Qts;
                 }
 
-
-
-                info.Arguments = "\"" + imprimanteCuisine + "\"";
-                info.Verb = "Printto";
-                info.CreateNoWindow = true;
-                info.WindowStyle = ProcessWindowStyle.Hidden;
-                Process.Start(info);
-
-                EstEnvoyerCuisine = true;
-                EnvoyerCuisineDeja = true;
+                if (string.IsNullOrWhiteSpace(settings.NomTemplateCuisine))
+                {
+                    MessageBox.Show("Définis le modéle d'impression dans paramétres");
+                    return;
+                }
+                var doc = fac.ExportWORD(fac.GetType(), settings.NomTemplateCuisine, !settings.DontUseHeader);
+                try
+                {
+                    ProcessStartInfo info = new ProcessStartInfo(doc);
+                    info.Arguments = "\"" + imprimanteCuisine + "\"";
+                    info.Verb = "Printto";
+                    info.CreateNoWindow = true;
+                    info.WindowStyle = ProcessWindowStyle.Hidden;
+                    Process.Start(info);
+                    EstEnvoyerCuisine = true;
+                    EnvoyerCuisineDeja = true;
+                }
+                catch (Exception s)
+                {
+                    MessageBox.Show(s.Message);
+                }
             }
-            catch (Exception s)
-            {
-                MessageBox.Show(s.Message);
-            }
+           
         }
 
         public string GetStatusColor()
@@ -246,9 +284,61 @@ namespace ErpAlgerie.Modules.CRM
                 DataHelpers.Shell.OpenScreenAttach(facture, facture.Name);
             }
         }
+
+
+        #region OVERRIDE
+
+        public override bool Cancel()
+        {
+            var factures = DS.db.GetAll<Facture>(a => a.Id == this.RefFacture) as IEnumerable<Facture>;
+
+            var result = base.Cancel();
+            if (!result)
+                return false;
+
+
+            if (factures != null && result == true)
+            {
+                foreach (var item in factures)
+                {
+                    if (!item.Cancel())
+                        continue;
+                }
+            }
+
+            return result;
+
+        }
+
+
+        public override bool Delete(bool ConfirmFromUser = true)
+        {
+
+            var factures = DS.db.GetAll<Facture>(a => a.Id == this.RefFacture) as IEnumerable<Facture>;
+
+            var result = base.Delete(ConfirmFromUser);
+
+            if (factures != null && result == true)
+            {
+                foreach (var item in factures)
+                {
+                    if (!item.Delete(false))
+                        continue;
+                }
+            }
+
+            return result;
+        }
+
+
+
+        #endregion
+
+
         #region REFERENCES
 
         public ObjectId? RefFacture { get; set; } = ObjectId.Empty;
+        public bool DoPrintFromTablet { get; set;}
 
         #endregion
     }

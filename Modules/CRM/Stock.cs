@@ -12,12 +12,21 @@ namespace ErpAlgerie.Modules.CRM
 {
     class Stock : ModelBase<Stock>
     {
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Stock";
-        [BsonIgnore]
-        public override string SubModule { get; set; } = "Articles et prix";
-        [BsonIgnore]
-        public override string IconName { get; set; } = "Gears";
+
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "STOCK";
+        public override string CollectionName { get; } = "Stocks";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
+        public override string IconName { get; set; } = "Plus";
+        public override bool ShowInDesktop { get; set; } = false;
+
+        public override string NameField { get; set; } = "Designiation";
+
+        #endregion
+
+        
 
 
 
@@ -32,20 +41,12 @@ namespace ErpAlgerie.Modules.CRM
                 throw new Exception("Designiation est obligatoire");
 
         }
-        public override string Name
-        {
-            get
-            {
-                return Designiation;
-            }
-            set => base.Name = value;
-        }
+       
 
         public Stock()
         {
 
-        }
-        public override string CollectionName { get; } = "Stocks";
+        } 
 
         [ColumnAttribute(ModelFieldType.Text, "")]
         [IsBoldAttribute(true)]

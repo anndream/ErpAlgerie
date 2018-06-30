@@ -1,5 +1,4 @@
-﻿using BarcodeLib;
-using ErpAlgerie.Modules.Core.Data;
+﻿using ErpAlgerie.Modules.Core.Data;
 using ErpAlgerie.Modules.Core.Module;
 using ErpAlgerie.Modules.CRM;
 using System;

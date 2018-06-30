@@ -16,18 +16,27 @@ namespace ErpAlgerie.Modules.CRM
 {
     class ElvaSettings : ModelBase<ElvaSettings>
     {
-        [BsonIgnore]
-        public override string ModuleName { get; set; } = "Configuration";
+        #region SETTINGS
+
+        public override bool Submitable { get; set; } = false;
+        public override string ModuleName { get; set; } = "APPLICATION";
+        public override string CollectionName { get; } = "Paramétrages";
+        public override OpenMode DocOpenMod { get; set; } = OpenMode.Detach;
+        public override string IconName { get; set; } = "Gears";
+        public override bool ShowInDesktop { get; set; } = true;
+
+        public override string NameField { get; set; } = "Libelle";
+
         public override bool IsInstance { get; set; } = true;
+
+        #endregion
 
 
         public ElvaSettings()
         {
            
         }
-
-        public override string CollectionName { get; } = "Configuration";
-
+         
 
 
         #region PROPERTIES

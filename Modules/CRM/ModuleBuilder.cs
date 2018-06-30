@@ -19,7 +19,7 @@ namespace ErpAlgerie.Modules.CRM
         #region SETTINGS
 
         public override bool Submitable { get; set; } = false;
-        public override string ModuleName { get; set; } = "Paramétrages";
+        public override string ModuleName { get; set; } = "APPLICATION";
         public override string CollectionName { get; } = "Classes";
         public override OpenMode DocOpenMod { get; set; } = OpenMode.Attach;
         public override string IconName { get; set; } = "Settings";
