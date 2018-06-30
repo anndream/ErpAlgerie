@@ -14,6 +14,8 @@
     x:Class="ErpAlgerie.Pages.Template.DetailView"
              mc:Ignorable="d" 
              d:DesignHeight="331.988" d:DesignWidth="920.749" KeyDown="{s:Action UserControl_KeyDown}" >
+
+    
     <DockPanel Background="#F6F6F6" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch">
 
         

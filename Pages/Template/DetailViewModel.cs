@@ -2665,13 +2665,13 @@ namespace ErpAlgerie.Pages.Template
             masterWrap.Height = Double.NaN;
             masterWrap.Width = 800;
 
-            if (isFreezed)
+            if (isFreezed)  
             {
-                var elements = stackContent.FindChildren<Expander>(); 
-
+                var elements = stackContent.FindChildren<UIElement>(); 
                 foreach (var item in elements)
                 { 
-                    item.IsEnabled = false; 
+                    item.IsHitTestVisible = false;
+                    item.Focusable = false;
                 }
                  
 
